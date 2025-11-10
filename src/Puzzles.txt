@@ -1,0 +1,6 @@
+Puzzle ID | Puzzle Name | Puzzle/Query | Solution | # of attempts | Puzzle Reward Item | Puzzle Reward Item ID
+P_1 | Think Fast | If Johnny had 35 apples and Sarah stole 7... but Brad smacks her and is able to return 4 apples how many apples does Johnny end up with? Assuming Johnny didn't eat any. Enter an integer. | 32 | 2 | Left Leg | I_9
+P_2 | Riddle Diddle | I have keys but no locks open. I have space but no room. You can enter but can't go outside. What am I? | keyboard | 3 | Right Leg | I_8
+P_3 | Alpha no Bet | What is the 28th letter of the Alphabet? | does not exist; no; only 26 letters | 2 | Torso | I_13
+P_4 | Darn Bloody Shapes | I am a 7 sided figure where all sides are different lengths. What am I student?.. | heptagon | 4 | Left Arm | I_12
+P_5 | It's Not That Hard Dude | I am an odd number. Take away one letter and I become even. What number am I? | seven; 7 | 3 | Right Arm | I_11
