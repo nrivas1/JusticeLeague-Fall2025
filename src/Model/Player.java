@@ -12,15 +12,6 @@ public class Player
     private Artifact equippedArtifact;
     private ArrayList<Artifact> inventory;
 
-    public Player()
-    {
-        this.playerID = 0;
-        this.playerName = "";
-        this.lives = 0;
-        this.health = 0;
-        this.canStun = false;
-        inventory = new ArrayList<>();
-    }
     public Player(int playerID, String playerName, int lives, int health)
     {
         this.playerID = playerID;
@@ -36,19 +27,9 @@ public class Player
         return playerID;
     }
 
-    public void setPlayerID(int playerID)
-    {
-        this.playerID = playerID;
-    }
-
     public ArrayList<Artifact> getInventory()
     {
         return inventory;
-    }
-
-    public void setInventory(ArrayList<Artifact> inventory)
-    {
-        this.inventory = inventory;
     }
 
     public Artifact getEquippedArtifact()
@@ -56,19 +37,9 @@ public class Player
         return equippedArtifact;
     }
 
-    public void setEquippedArtifact(Artifact equippedArtifact)
-    {
-        this.equippedArtifact = equippedArtifact;
-    }
-
     public boolean isCanStun()
     {
         return canStun;
-    }
-
-    public void setCanStun(boolean canStun)
-    {
-        this.canStun = canStun;
     }
 
     public int getHealth()
@@ -76,19 +47,10 @@ public class Player
         return health;
     }
 
-    public void setHealth(int health)
-    {
-        this.health = health;
-    }
 
     public int getLives()
     {
         return lives;
-    }
-
-    public void setLives(int lives)
-    {
-        this.lives = lives;
     }
 
     public String getPlayerName()
@@ -96,8 +58,4 @@ public class Player
         return playerName;
     }
 
-    public void setPlayerName(String playerName)
-    {
-        this.playerName = playerName;
-    }
 }
