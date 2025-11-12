@@ -4,7 +4,7 @@ public class Monster
 {
     private int monsterID;
     private String monsterName;
-    private int Damage;
+    private int damage;
     private String enterStatement;
     private String exitStatement;
     private boolean isStunned;
@@ -13,20 +13,20 @@ public class Monster
     {
         this.monsterID = 0;
         this.monsterName = "";
-        this.Damage = 0;
+        this.damage = 0;
         this.enterStatement = "";
         this.exitStatement = "";
         this.isStunned = false;
     }
 
-    public Monster(int monsterID, String monsterName, String enterStatement, String exitStatement, boolean isStunned)
+    public Monster(int monsterID, String monsterName, int damage, String enterStatement, String exitStatement, boolean isStunned)
     {
         this.monsterID = monsterID;
         this.monsterName = monsterName;
-        this.Damage = 0;
+        this.damage = damage;
         this.enterStatement = enterStatement;
         this.exitStatement = exitStatement;
-        this.isStunned = false;
+        this.isStunned = isStunned;
     }
 
     public int getMonsterID()
@@ -39,34 +39,14 @@ public class Monster
         this.monsterID = monsterID;
     }
 
-    public String getMonsterName()
+    public boolean isStunned()
     {
-        return monsterName;
+        return isStunned;
     }
 
-    public void setMonsterName(String monsterName)
+    public void setStunned(boolean stunned)
     {
-        this.monsterName = monsterName;
-    }
-
-    public int getDamage()
-    {
-        return Damage;
-    }
-
-    public void setDamage(int damage)
-    {
-        Damage = damage;
-    }
-
-    public String getEnterStatement()
-    {
-        return enterStatement;
-    }
-
-    public void setEnterStatement(String enterStatement)
-    {
-        this.enterStatement = enterStatement;
+        isStunned = stunned;
     }
 
     public String getExitStatement()
@@ -79,13 +59,34 @@ public class Monster
         this.exitStatement = exitStatement;
     }
 
-    public boolean isStunned()
+    public String getEnterStatement()
     {
-        return isStunned;
+        return enterStatement;
     }
 
-    public void setStunned(boolean stunned)
+    public void setEnterStatement(String enterStatement)
     {
-        isStunned = stunned;
+        this.enterStatement = enterStatement;
     }
+
+    public int getDamage()
+    {
+        return damage;
+    }
+
+    public void setDamage(int damage)
+    {
+        this.damage = damage;
+    }
+
+    public String getMonsterName()
+    {
+        return monsterName;
+    }
+
+    public void setMonsterName(String monsterName)
+    {
+        this.monsterName = monsterName;
+    }
+
 }

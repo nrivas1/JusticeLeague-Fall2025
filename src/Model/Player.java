@@ -14,15 +14,14 @@ public class Player
 
     public Player()
     {
-        playerID = 0;
-        playerName = "";
-        lives = 0;
-        health = 0;
-        canStun = false;
+        this.playerID = 0;
+        this.playerName = "";
+        this.lives = 0;
+        this.health = 0;
+        this.canStun = false;
         inventory = new ArrayList<>();
     }
-
-    public Player(int playerID, String playerName,  int lives, int health)
+    public Player(int playerID, String playerName, int lives, int health)
     {
         this.playerID = playerID;
         this.playerName = playerName;
@@ -62,7 +61,7 @@ public class Player
         this.equippedArtifact = equippedArtifact;
     }
 
-    public boolean canStun()
+    public boolean isCanStun()
     {
         return canStun;
     }

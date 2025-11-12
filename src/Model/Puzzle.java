@@ -34,19 +34,19 @@ public class Puzzle
         return puzzleID;
     }
 
-    public String getPuzzleName()
+    public void setPuzzleID(int puzzleID)
     {
-        return puzzleName;
+        this.puzzleID = puzzleID;
     }
 
-    public String getPuzzQuery()
+    public boolean isSolved()
     {
-        return puzzQuery;
+        return solved;
     }
 
-    public String getSolution()
+    public void setSolved(boolean solved)
     {
-        return solution;
+        this.solved = solved;
     }
 
     public int getAttempts()
@@ -59,10 +59,33 @@ public class Puzzle
         this.attempts = attempts;
     }
 
-    public boolean isSolved()
+    public String getSolution()
     {
-        return solved;
+        return solution;
     }
 
+    public void setSolution(String solution)
+    {
+        this.solution = solution;
+    }
 
+    public String getPuzzQuery()
+    {
+        return puzzQuery;
+    }
+
+    public void setPuzzQuery(String puzzQuery)
+    {
+        this.puzzQuery = puzzQuery;
+    }
+
+    public String getPuzzleName()
+    {
+        return puzzleName;
+    }
+
+    public void setPuzzleName(String puzzleName)
+    {
+        this.puzzleName = puzzleName;
+    }
 }

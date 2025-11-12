@@ -9,23 +9,25 @@ public class Room
     private String roomName;
     private String roomDescription;
     private Map<String, Integer> exits;
-    private boolean Visited;
+    private boolean visited;
 
     public Room()
     {
         this.roomID = 0;
         this.roomName = "";
         this.roomDescription = "";
-        this.exits = new HashMap<>();
-        this.Visited = false;
-
+        exits = new HashMap<>();
+        visited = false;
     }
+
+
     public Room(int roomID, String roomName, String roomDescription, Map<String, Integer> exits)
     {
         this.roomID = roomID;
         this.roomName = roomName;
         this.roomDescription = roomDescription;
         this.exits = exits;
+        this.visited = false;
     }
 
     public int getRoomID()
@@ -38,24 +40,14 @@ public class Room
         this.roomID = roomID;
     }
 
-    public String getRoomName()
+    public boolean isVisited()
     {
-        return roomName;
+        return visited;
     }
 
-    public void setRoomName(String roomName)
+    public void setVisited(boolean visited)
     {
-        this.roomName = roomName;
-    }
-
-    public String getRoomDescription()
-    {
-        return roomDescription;
-    }
-
-    public void setRoomDescription(String roomDescription)
-    {
-        this.roomDescription = roomDescription;
+        this.visited = visited;
     }
 
     public Map<String, Integer> getExits()
@@ -68,15 +60,23 @@ public class Room
         this.exits = exits;
     }
 
-    public boolean isVisited()
+    public String getRoomDescription()
     {
-        return Visited;
+        return roomDescription;
     }
 
-    public void setVisited(boolean visited)
+    public void setRoomDescription(String roomDescription)
     {
-        Visited = visited;
+        this.roomDescription = roomDescription;
     }
 
+    public String getRoomName()
+    {
+        return roomName;
+    }
 
+    public void setRoomName(String roomName)
+    {
+        this.roomName = roomName;
+    }
 }

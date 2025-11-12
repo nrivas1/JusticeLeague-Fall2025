@@ -20,7 +20,7 @@ public class Artifact
         this.healPoints = 0;
     }
 
-    public Artifact(int artifactID, String artifactName, String artifactDescription, String category, boolean stun,  int healPoints,  int stunTurns)
+    public Artifact(int artifactID, String artifactName, String artifactDescription, String category, boolean stun, int healPoints)
     {
         this.artifactID = artifactID;
         this.artifactName = artifactName;
@@ -28,7 +28,6 @@ public class Artifact
         this.category = category;
         this.stun = stun;
         this.healPoints = healPoints;
-        this.stunTurns = stunTurns;
     }
 
     public int getArtifactID()
@@ -100,5 +99,4 @@ public class Artifact
     {
         this.stunTurns = stunTurns;
     }
-
 }
