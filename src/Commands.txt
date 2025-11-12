@@ -12,4 +12,10 @@ Escape | Enter 'Escape' to attempt to open the gate in the backyard. | local
 Commands | Pulls up command list. | global
 Start Game | Boots up 'Remember Me: The Last Semester' | global
 Save Game | Saves game progress and stats. | global
-Load Game |
+Load Game | Loads game | local
+Map | Pulls up a map of the current floor the player is in. | local
+Health | Pulls up Player's current health stats. | global
+Ignore Puzzle | Proceed with game withougt solving puzzle. | global
+Hint | Enter while solving puzzle to receive a hint to the answer. | local
+Solve Puzzle | Attempt to solve puzzle. | local
+Run | Escape monster without engaging. | local
