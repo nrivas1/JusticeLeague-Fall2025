@@ -50,7 +50,7 @@ public class Room
         this.visited = visited;
     }
 
-    public Map<String, Integer> getExits()
+    public Map<String, String> getExits()
     {
         return exits;
     }
