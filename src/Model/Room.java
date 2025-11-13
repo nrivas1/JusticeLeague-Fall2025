@@ -11,15 +11,6 @@ public class Room
     private Map<String, Integer> exits;
     private boolean visited;
 
-    public Room()
-    {
-        this.roomID = 0;
-        this.roomName = "";
-        this.roomDescription = "";
-        exits = new HashMap<>();
-        visited = false;
-    }
-
 
     public Room(int roomID, String roomName, String roomDescription, Map<String, Integer> exits)
     {
@@ -35,19 +26,9 @@ public class Room
         return roomID;
     }
 
-    public void setRoomID(int roomID)
-    {
-        this.roomID = roomID;
-    }
-
     public boolean isVisited()
     {
         return visited;
-    }
-
-    public void setVisited(boolean visited)
-    {
-        this.visited = visited;
     }
 
     public Map<String, Integer> getExits()
@@ -55,28 +36,13 @@ public class Room
         return exits;
     }
 
-    public void setExits(Map<String, Integer> exits)
-    {
-        this.exits = exits;
-    }
-
     public String getRoomDescription()
     {
         return roomDescription;
     }
 
-    public void setRoomDescription(String roomDescription)
-    {
-        this.roomDescription = roomDescription;
-    }
-
     public String getRoomName()
     {
         return roomName;
-    }
-
-    public void setRoomName(String roomName)
-    {
-        this.roomName = roomName;
     }
 }
