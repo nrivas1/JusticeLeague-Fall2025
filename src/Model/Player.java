@@ -11,16 +11,8 @@ public class Player
     private boolean canStun;
     private Artifact equippedArtifact;
     private ArrayList<Artifact> inventory;
+    private ArrayList<Notes> noteInventory = new ArrayList<>();
 
-    public Player()
-    {
-        this.playerID = 0;
-        this.playerName = "";
-        this.lives = 0;
-        this.health = 0;
-        this.canStun = false;
-        inventory = new ArrayList<>();
-    }
     public Player(int playerID, String playerName, int lives, int health)
     {
         this.playerID = playerID;
@@ -36,19 +28,9 @@ public class Player
         return playerID;
     }
 
-    public void setPlayerID(int playerID)
-    {
-        this.playerID = playerID;
-    }
-
     public ArrayList<Artifact> getInventory()
     {
         return inventory;
-    }
-
-    public void setInventory(ArrayList<Artifact> inventory)
-    {
-        this.inventory = inventory;
     }
 
     public Artifact getEquippedArtifact()
@@ -56,19 +38,9 @@ public class Player
         return equippedArtifact;
     }
 
-    public void setEquippedArtifact(Artifact equippedArtifact)
-    {
-        this.equippedArtifact = equippedArtifact;
-    }
-
-    public boolean isCanStun()
+    public boolean canStun()
     {
         return canStun;
-    }
-
-    public void setCanStun(boolean canStun)
-    {
-        this.canStun = canStun;
     }
 
     public int getHealth()
@@ -76,19 +48,10 @@ public class Player
         return health;
     }
 
-    public void setHealth(int health)
-    {
-        this.health = health;
-    }
 
     public int getLives()
     {
         return lives;
-    }
-
-    public void setLives(int lives)
-    {
-        this.lives = lives;
     }
 
     public String getPlayerName()
@@ -96,8 +59,49 @@ public class Player
         return playerName;
     }
 
-    public void setPlayerName(String playerName)
+    public void equip(String itemName)
     {
-        this.playerName = playerName;
+        for (Artifact artifact : inventory)
+        {
+            if (artifact.getArtifactName().equals(itemName) && artifact.canStun())
+            {
+                if (equippedArtifact != null)
+                {
+                    System.out.println("Unequipped artifact " + artifact.getArtifactName());
+                }
+                equippedArtifact = artifact;
+                System.out.println(artifact.getArtifactName() + " has been equipped.");
+                return;
+            }
+        }
+        System.out.println(itemName + " not found in inventory or is equipable .");
+    }
+
+    public void unequip(String itemName)
+    {
+        if (equippedArtifact == null)
+        {
+            System.out.println("No item artifact currently equipped.");
+        }
+        System.out.println("Unequipped item artifact: " + itemName);
+        equippedArtifact = null;
+    }
+
+    public void pickUp(Artifact artifact)
+    {
+        inventory.add(artifact);
+        System.out.println("Picked up: " + artifact.getArtifactName());
+    }
+
+    public void drop(Artifact artifact)
+    {
+        if (!inventory.contains(artifact))
+        {
+            System.out.println("You don't have " + artifact.getArtifactName());
+            return;
+        }
+
+        inventory.remove(artifact);
+        System.out.println("Dropped: " + artifact.getArtifactName());
     }
 }
