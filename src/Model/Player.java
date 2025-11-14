@@ -11,7 +11,9 @@ public class Player
     private boolean canStun;
     private Artifact equippedArtifact;
     private ArrayList<Artifact> inventory;
-    private ArrayList<Notes> noteInventory = new ArrayList<>();
+    private ArrayList<Notes> noteInventory = new ArrayList<>(9);
+    private Monster monster;
+    private Room currentRoom;
 
     public Player(int playerID, String playerName, int lives, int health)
     {
@@ -103,5 +105,100 @@ public class Player
 
         inventory.remove(artifact);
         System.out.println("Dropped: " + artifact.getArtifactName());
+    }
+
+    public void viewHealth()
+    {
+        System.out.println("Health: " + health + "/100)");
+        System.out.println("Lives: " + lives + "/3");
+    }
+
+    public void viewItemInventory()
+    {
+        System.out.println("Inventory: ");
+        if (inventory.isEmpty())
+        {
+            System.out.println("I haven't collected any items yet.");
+        }
+        else
+        {
+            for (Artifact artifact : inventory)
+            {
+                System.out.println(artifact.getArtifactName());
+            }
+        }
+    }
+
+    public void viewNoteInventory()
+    {
+        System.out.println("Notes: ");
+        if (noteInventory.isEmpty())
+        {
+            System.out.println("I haven't collected any notes yet.");
+        }
+        else
+        {
+            for (Notes note : noteInventory)
+            {
+                System.out.println(note.getNoteName());
+            }
+        }
+    }
+
+    public void readNote(String noteName)
+    {
+        for (Notes note : noteInventory)
+        {
+            if (note.getNoteName().equalsIgnoreCase(noteName))
+            {
+                System.out.println(note.getNoteName() + ":\n" + note.getNoteDescription());
+                return;
+            }
+        }
+        System.out.println("I have not collected a note named '" + noteName + "'.");
+    }
+
+    public void heal()
+    {
+        final int maxHealth = 100;
+        final int healAmount = 30;
+        boolean hasBandage = false;
+
+        if (health >= maxHealth)
+        {
+            System.out.println("I don't need to heal right now.");
+        }
+
+        for (Artifact artifact : inventory)
+        {
+            if (artifact.getArtifactName().equalsIgnoreCase("Bandage"))
+            {
+                hasBandage = true;
+                break;
+            }
+        }
+
+        if (!hasBandage)
+        {
+            System.out.println("I need to find a bandage to heal.");
+        }
+
+        if (equippedArtifact == null || !equippedArtifact.getArtifactName().equalsIgnoreCase("Bandage"))
+        {
+            System.out.println("I must equip my bandage to heal.");
+            return;
+        }
+
+        health = Math.min(health + healAmount, maxHealth);
+        System.out.println("I used the bandage to heal myself. My current health: " + health);
+
+// Will implement this later.
+//        if (monster != null)
+//        {
+//            if (monster.getCurrentRoom().equals(currentRoom))
+//            {
+//                monster.attack(this);
+//            }
+//        }
     }
 }

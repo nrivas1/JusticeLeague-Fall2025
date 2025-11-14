@@ -11,16 +11,6 @@ public class Room
     private Map<String, String> exits;
     private boolean visited;
 
-    public Room()
-    {
-        this.roomID = 0;
-        this.roomName = "";
-        this.roomDescription = "";
-        exits = new HashMap<>();
-        visited = false;
-    }
-
-
     public Room(int roomID, String roomName, String roomDescription, Map<String, String> exits)
     {
         this.roomID = roomID;
