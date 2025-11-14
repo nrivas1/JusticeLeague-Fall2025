@@ -8,7 +8,7 @@ public class Room
     private int roomID;
     private String roomName;
     private String roomDescription;
-    private Map<String, Integer> exits;
+    private Map<String, String> exits;
     private boolean visited;
 
     public Room()
@@ -21,7 +21,7 @@ public class Room
     }
 
 
-    public Room(int roomID, String roomName, String roomDescription, Map<String, Integer> exits)
+    public Room(int roomID, String roomName, String roomDescription, Map<String, String> exits)
     {
         this.roomID = roomID;
         this.roomName = roomName;
@@ -33,11 +33,6 @@ public class Room
     public int getRoomID()
     {
         return roomID;
-    }
-
-    public void setRoomID(int roomID)
-    {
-        this.roomID = roomID;
     }
 
     public boolean isVisited()
@@ -55,28 +50,13 @@ public class Room
         return exits;
     }
 
-    public void setExits(Map<String, Integer> exits)
-    {
-        this.exits = exits;
-    }
-
     public String getRoomDescription()
     {
         return roomDescription;
     }
 
-    public void setRoomDescription(String roomDescription)
-    {
-        this.roomDescription = roomDescription;
-    }
-
     public String getRoomName()
     {
         return roomName;
-    }
-
-    public void setRoomName(String roomName)
-    {
-        this.roomName = roomName;
     }
 }
