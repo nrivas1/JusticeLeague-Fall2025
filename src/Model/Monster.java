@@ -8,6 +8,7 @@ public class Monster
     private String enterStatement;
     private String exitStatement;
     private boolean isStunned;
+    private Room currentRoom;
 
 
     public Monster(int monsterID, String monsterName, int damage, String enterStatement, String exitStatement, boolean isStunned)
@@ -50,4 +51,8 @@ public class Monster
         return monsterName;
     }
 
+    public Room getCurrentRoom()
+    {
+        return currentRoom;
+    }
 }
