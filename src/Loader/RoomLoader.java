@@ -36,7 +36,6 @@ public class RoomLoader {
                     continue;
                 }
 
-                // Clean whitespace
                 for (int i = 0; i < parts.length; i++)
                     parts[i] = parts[i].trim();
 
@@ -45,9 +44,9 @@ public class RoomLoader {
                 String roomName = parts[1];
                 String roomDesc = parts[2];
 
-                // ----- SKIP "Room Exits" descriptive field at parts[3] -----
+                // ----- SKIP "Room Exits" descriptive -----
 
-                // ----- EXIT COLUMNS (parts[4]–parts[9]) -----
+                // ----- EXIT COLUMNS -----
                 Map<String, String> exits = new HashMap<>();
 
                 for (int i = 4; i <= 9; i++) {
@@ -60,7 +59,6 @@ public class RoomLoader {
                 // Create Room
                 Room room = new Room(roomID, roomName, roomDesc, exits);
 
-                // Store in Map
                 roomMap.put(roomID, room);
             }
         }
