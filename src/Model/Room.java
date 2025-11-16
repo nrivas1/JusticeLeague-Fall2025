@@ -1,6 +1,7 @@
 package Model;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class Room
@@ -10,8 +11,10 @@ public class Room
     private String roomDescription;
     private Map<String, String> exits;
     private boolean visited;
+    private Monster monster;
+    private List<Artifact> items;
 
-    public Room(String roomID, String roomName, String roomDescription, Map<String, String> exits)
+    public Room(String roomID, String roomName, String roomDescription, Map<String, String> exits, Monster monster, List<Artifact> items)
     {
         this.roomID = roomID;
         this.roomName = roomName;
@@ -48,5 +51,26 @@ public class Room
     public String getRoomName()
     {
         return roomName;
+    }
+
+    public void triggerMonsterEntry()
+    {
+        if (monster != null)
+        {
+            System.out.println(monster.getEnterStatement());
+        }
+    }
+
+    public void triggerMonsterExit()
+    {
+        if (monster != null)
+        {
+            System.out.println(monster.getexitStatement());
+        }
+    }
+
+    public Monster getMonster()
+    {
+        return monster;
     }
 }
