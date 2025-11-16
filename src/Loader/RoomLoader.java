@@ -1,4 +1,5 @@
 package Loader;
 
-public class RoomLoader {
+public class RoomLoader
+{
 }

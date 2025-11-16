@@ -1,0 +1,9 @@
+#Format: Monster ID | Monster Name | Item Drop | Damage (stunned) | Damage (unstunned) | Win chance (with item) | Win chance (without item) | Enter Statement | Exit Statement| Stun Statement | Run Statement | Movement
+
+M_1 | Front Desk Lady | Nothing | 10 | 20 | 100% | 0% | The Front Desk Lady is here! You can’t see her face | You hear the footsteps grow louder | You used a “item name” against the Front Desk Lady! She has been stunned for “item stun length”! She will move again after the stun length ends | You narrowly escape the Front Desk Lady! She hits you with her foot as you run away! (-20 hp) | Moves one room per beat
+
+M_2 | Janitor | Nothing | 0 | 20 | 100% | 0% | The Janitor has found you! What will you do? | You hear the footsteps grow louder | You used a “item name” against the Janitor! He has been stunned for “item stun length”! He will move again after the stun length ends | You narrowly escape the Janitor! He hits you with the broken mop! (-20 hp) | Moves one room per beat
+
+M_3 | Teacher | Nothing | 0 | 20 | 100% | 0% | The Teacher has been awakened! The Teacher has been awakened! What will you do? | You hear the footsteps grow louder | You used a “item name” against the Teacher! He has been stunned for “item stun length”! He will move again after the stun length ends | You narrowly escape the Teacher! He swipes at you with the broken file! (-20 hp) | Moves one room per beat
+
+M_4 | Dean | Doll Head | 0 | 10 | 0% | 0% | The dean has found you! They are too far away to fight. What will you do? | You hear faint footsteps | You toss your Bat at the Dean, and they drop a mannequin head | You narrowly escape the Dean as they shoot you with their stapler! (-10 hp) | Moves one room per beat | Ranged-only monster; only throwable bat works once; disables throw option after drop
