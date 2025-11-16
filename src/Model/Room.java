@@ -5,15 +5,15 @@ import java.util.Map;
 
 public class Room
 {
-    private int roomID;
+    private String roomID;
     private String roomName;
     private String roomDescription;
-    private Map<String, Integer> exits;
+    private Map<String, String> exits;
     private boolean visited;
 
     public Room()
     {
-        this.roomID = 0;
+        this.roomID = "";
         this.roomName = "";
         this.roomDescription = "";
         exits = new HashMap<>();
@@ -21,7 +21,7 @@ public class Room
     }
 
 
-    public Room(int roomID, String roomName, String roomDescription, Map<String, Integer> exits)
+    public Room(String roomID, String roomName, String roomDescription, Map<String, String> exits)
     {
         this.roomID = roomID;
         this.roomName = roomName;
@@ -30,12 +30,12 @@ public class Room
         this.visited = false;
     }
 
-    public int getRoomID()
+    public String getRoomID()
     {
         return roomID;
     }
 
-    public void setRoomID(int roomID)
+    public void setRoomID(String roomID)
     {
         this.roomID = roomID;
     }
@@ -50,12 +50,12 @@ public class Room
         this.visited = visited;
     }
 
-    public Map<String, Integer> getExits()
+    public Map<String, String> getExits()
     {
         return exits;
     }
 
-    public void setExits(Map<String, Integer> exits)
+    public void setExits(Map<String, String> exits)
     {
         this.exits = exits;
     }
