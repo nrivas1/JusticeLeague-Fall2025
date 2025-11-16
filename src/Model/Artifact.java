@@ -2,25 +2,23 @@ package Model;
 
 public class Artifact
 {
-    private int artifactID;
+    private String artifactID;
     private String artifactName;
     private String artifactDescription;
     private String category;
-    private boolean canStun;
-    private int healPoints;
-    private int stunTurns;
+    private int stun;
+    private String attachedPuzzle;
 
-    public Artifact(int artifactID, String artifactName, String artifactDescription, String category, boolean canStun, int healPoints)
+    public Artifact(String artifactID, String artifactName, String artifactDescription, int stun, String category)
     {
         this.artifactID = artifactID;
         this.artifactName = artifactName;
         this.artifactDescription = artifactDescription;
         this.category = category;
-        this.canStun = canStun;
-        this.healPoints = healPoints;
+        this.stun = stun;
     }
 
-    public int getArtifactID()
+    public String getArtifactID()
     {
         return artifactID;
     }
@@ -42,19 +40,18 @@ public class Artifact
         return category;
     }
 
+    public int getStun()
+    {
+        return stun;
+    }
 
     public boolean canStun()
     {
         return false;
     }
 
-    public int getHealPoints()
+    public String getAttachedPuzzle()
     {
-        return healPoints;
-    }
-
-    public int getStunTurns()
-    {
-        return stunTurns;
+        return attachedPuzzle;
     }
 }

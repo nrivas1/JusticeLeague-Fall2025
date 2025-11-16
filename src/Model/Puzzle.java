@@ -1,25 +1,32 @@
 package Model;
 
+import java.util.List;
+
 public class Puzzle
 {
-    private int puzzleID;
+    private String puzzleID;
     private String puzzleName;
     private String puzzQuery;
-    private String solution;
+    private List<String> solution;
     private int attempts;
+    private String rewardItemName;
+    private String rewardItemID;
     private boolean solved;
 
-    public Puzzle(int puzzleID, String puzzleName, String puzzQuery, String solution, int attempts, boolean solved)
+
+    public Puzzle(String puzzleID, String puzzleName, String puzzQuery, List<String> solution, int attempts, String rewardItemName, String rewardItemID)
     {
         this.puzzleID = puzzleID;
         this.puzzleName = puzzleName;
         this.puzzQuery = puzzQuery;
         this.solution = solution;
         this.attempts = attempts;
-        this.solved = false;
+        this.rewardItemName = rewardItemName;
+        this.rewardItemID = rewardItemID;
+
     }
 
-    public int getPuzzleID()
+    public String getPuzzleID()
     {
         return puzzleID;
     }
@@ -34,7 +41,7 @@ public class Puzzle
         return attempts;
     }
 
-    public String getSolution()
+    public List<String> getSolution()
     {
         return solution;
     }
