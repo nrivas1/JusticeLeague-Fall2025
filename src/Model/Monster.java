@@ -8,16 +8,8 @@ public class Monster
     private String enterStatement;
     private String exitStatement;
     private boolean isStunned;
+    private Room currentRoom;
 
-    public Monster()
-    {
-        this.monsterID = 0;
-        this.monsterName = "";
-        this.damage = 0;
-        this.enterStatement = "";
-        this.exitStatement = "";
-        this.isStunned = false;
-    }
 
     public Monster(int monsterID, String monsterName, int damage, String enterStatement, String exitStatement, boolean isStunned)
     {
@@ -34,19 +26,9 @@ public class Monster
         return monsterID;
     }
 
-    public void setMonsterID(int monsterID)
-    {
-        this.monsterID = monsterID;
-    }
-
     public boolean isStunned()
     {
         return isStunned;
-    }
-
-    public void setStunned(boolean stunned)
-    {
-        isStunned = stunned;
     }
 
     public String getExitStatement()
@@ -54,19 +36,9 @@ public class Monster
         return exitStatement;
     }
 
-    public void setExitStatement(String exitStatement)
-    {
-        this.exitStatement = exitStatement;
-    }
-
     public String getEnterStatement()
     {
         return enterStatement;
-    }
-
-    public void setEnterStatement(String enterStatement)
-    {
-        this.enterStatement = enterStatement;
     }
 
     public int getDamage()
@@ -74,19 +46,13 @@ public class Monster
         return damage;
     }
 
-    public void setDamage(int damage)
-    {
-        this.damage = damage;
-    }
-
     public String getMonsterName()
     {
         return monsterName;
     }
 
-    public void setMonsterName(String monsterName)
+    public Room getCurrentRoom()
     {
-        this.monsterName = monsterName;
+        return currentRoom;
     }
-
 }
