@@ -21,8 +21,12 @@ public class GameController {
 
     public void start() {
         gRunning = true;
-        vw.println("Welcome to Remember Me: The Last Semester!");
-        runLoop();
+        if (!st.isIntroShown()) {
+            vw.println("Welcome to Remember Me: The Last Semester!");
+            runLoop();
+        } else {
+            vw.println("Welcome back to Remember Me: The Last Semester!");
+        }
     }
 
     private void runLoop() {
@@ -57,5 +61,21 @@ public class GameController {
             displayExits();
             return;
         }
+
+        vw.println("Unknown/Wrong command. Type 'Commands' to view a list of viable commands.");
+    }
+
+    private void displayHelp() {
+        var cmdList = commands.listAll();
+        vw.printHelp(cmdList);
+    }
+
+    private void displayExits() {
+        Room rm = st.getCurrentRoom();
+        if (rm == null) {
+            vw.println("Somehow, you're not in a room - which is insane to me.");
+            return;
+        }
+        vw.printExits(rm);
     }
 }
