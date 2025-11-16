@@ -11,7 +11,7 @@ import java.util.List;
 public class Commands {
 
     // ---- Public DTO (record) for each command line ----
-    public static record Command(String name, String description) {}
+    public static record Command(String cmdName, String cmdDescription) {}
 
     // ---- Cached commands (first two columns only) ----
     private final List<Command> cache;
@@ -66,7 +66,7 @@ public class Commands {
         }
 
         // Optional: sort by name
-        list.sort((a, b) -> a.name().compareToIgnoreCase(b.name()));
+        list.sort((a, b) -> a.cmdName().compareToIgnoreCase(b.cmdName()));
         return list;
     }
 
@@ -76,5 +76,13 @@ public class Commands {
         f.add(new Command("look", "Describe the current room"));
         f.add(new Command("go <dir>", "Move north, south, east, or west"));
         return f;
+    }
+
+    public String getName() {
+        return cache.get(0).cmdName();
+    }
+
+    public String getDescription() {
+        return cache.get(1).cmdDescription();
     }
 }
