@@ -5,14 +5,14 @@ import java.util.Map;
 
 public class Room
 {
-    private int roomID;
+    private String roomID;
     private String roomName;
     private String roomDescription;
-    private Map<String, Integer> exits;
+    private Map<String, String> exits;
     private boolean visited;
 
 
-    public Room(int roomID, String roomName, String roomDescription, Map<String, Integer> exits)
+    public Room(String roomID, String roomName, String roomDescription, Map<String, String> exits)
     {
         this.roomID = roomID;
         this.roomName = roomName;
@@ -21,7 +21,7 @@ public class Room
         this.visited = false;
     }
 
-    public int getRoomID()
+    public String getRoomID()
     {
         return roomID;
     }
@@ -31,7 +31,7 @@ public class Room
         return visited;
     }
 
-    public Map<String, Integer> getExits()
+    public Map<String, String> getExits()
     {
         return exits;
     }
