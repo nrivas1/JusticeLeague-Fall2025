@@ -45,10 +45,10 @@ public class GameController {
     }
 
     private void handleInput(String abr) {
-        if (abr.isEmpty()) {
-            return;
-        }
+        if (abr == null || abr.isEmpty()) return;
         String lowerCase = abr.toLowerCase(Locale.ROOT);
+        Player player = st.getPlayer();
+        Room current = st.getCurrentRoom();
 
         if (lowerCase.equals("quit") || lowerCase.equals("exit")) {
             gRunning = false;
@@ -66,6 +66,79 @@ public class GameController {
             return;
         }
 
+        if (lowerCase.equals("map")) {
+            displayMap();
+            return;
+        }
+
+        if (lowerCase.equals("health") && player != null) {
+            player.viewHealth();
+            return;
+        }
+
+        if (lowerCase.equals("inventory") && player != null) {
+            player.viewItemInventory();
+            return;
+        }
+
+        if (lowerCase.equals("note inventory") && player != null) {
+            player.viewNoteInventory();
+            return;
+        }
+
+        if (lowerCase.startsWith("read ") && player != null) {
+            String noteName = abr.substring(5).trim();
+            player.readNote(noteName);
+            return;
+        }
+
+        if (lowerCase.startsWith("pickup ") && player != null && current != null) {
+            String itemName = abr.substring(7).trim();
+            Artifact toPickup = current.getItems().stream()
+                    .filter(a -> a.getArtifactName().equalsIgnoreCase(itemName))
+                    .findFirst()
+                    .orElse(null);
+            if (toPickup != null) {
+                player.pickUp(toPickup);
+                current.getItems().remove(toPickup);
+            } else {
+                vw.println("That item isn't here.");
+            }
+            return;
+        }
+
+        if (lowerCase.startsWith("drop ") && player != null) {
+            String itemName = abr.substring(5).trim();
+            Artifact toDrop = player.getInventory().stream()
+                    .filter(a -> a.getArtifactName().equalsIgnoreCase(itemName))
+                    .findFirst()
+                    .orElse(null);
+            if (toDrop != null) {
+                player.drop(toDrop);
+                if (current != null) current.getItems().add(toDrop);
+            } else {
+                vw.println("You don't have that item.");
+            }
+            return;
+        }
+
+        if (lowerCase.startsWith("equip ") && player != null) {
+            String itemName = abr.substring(6).trim();
+            player.equip(itemName);
+            return;
+        }
+
+        if (lowerCase.startsWith("unequip ") && player != null) {
+            String itemName = abr.substring(8).trim();
+            player.unequip(itemName);
+            return;
+        }
+
+        if (lowerCase.equals("heal") && player != null) {
+            player.heal();
+            return;
+        }
+
         if (lowerCase.startsWith("go ")) {
             String target = abr.substring(3).trim();
             handleMovement(target);
@@ -73,6 +146,21 @@ public class GameController {
         }
 
         vw.println("Unknown/Wrong command. Type 'Commands' to view a list of viable commands.");
+    }
+
+    private void displayMap() {
+        Map<String, Room> allRooms = st.getRoomIndex();
+        vw.println("\n📍 MAP OF ROOMS & EXITS:");
+        for (Room room : allRooms.values()) {
+            vw.println("- " + room.getRoomID() + ": " + room.getRoomName());
+            Map<String, String> exits = room.getExits();
+            if (exits != null && !exits.isEmpty()) {
+                vw.println("   Exits to: " + exits.values());
+            } else {
+                vw.println("   No exits");
+            }
+        }
+        vw.println(" MAP OF ROOMS & EXITS:");
     }
 
     private void displayHelp() {
