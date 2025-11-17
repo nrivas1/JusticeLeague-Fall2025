@@ -78,14 +78,4 @@ public class GameController {
         }
         vw.printExits(rm);
     }
-
-    public void handleRoomEntry(Room room)
-    {
-        System.out.println(room.getRoomDescription());
-
-        if (room.getMonster() != null)
-        {
-            System.out.println(room.getMonster().getEnterStatement());
-        }
-    }
 }
