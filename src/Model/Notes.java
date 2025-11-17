@@ -9,12 +9,6 @@ public class Notes
     private Map<Room, Integer> noteMap;
 
 
-    public Notes()
-    {
-        this.noteName = "";
-        this.noteDescription = "";
-    }
-
     public Notes(String noteName, String noteDescription)
     {
         this.noteName = noteName;
@@ -26,20 +20,8 @@ public class Notes
         return noteName;
     }
 
-    public void setNoteName(String noteName)
-    {
-        this.noteName = noteName;
-    }
-
     public String getNoteDescription()
     {
         return noteDescription;
     }
-
-    public void setNoteDescription(String noteDescription)
-    {
-        this.noteDescription = noteDescription;
-    }
-
-
 }

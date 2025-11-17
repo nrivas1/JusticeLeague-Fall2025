@@ -1,42 +1,34 @@
 package Model;
 
+import java.util.List;
+
 public class Puzzle
 {
-    private int puzzleID;
+    private String puzzleID;
     private String puzzleName;
     private String puzzQuery;
-    private String solution;
+    private List<String> solution;
     private int attempts;
+    private String rewardItemName;
+    private String rewardItemID;
     private boolean solved;
 
-    public Puzzle()
-    {
-        this.puzzleID = 0;
-        this.puzzleName = "";
-        this.puzzQuery = "";
-        this.solution = "";
-        this.attempts = 0;
-        this.solved = false;
-    }
 
-    public Puzzle(int puzzleID, String puzzleName, String puzzQuery, String solution, int attempts, boolean solved)
+    public Puzzle(String puzzleID, String puzzleName, String puzzQuery, List<String> solution, int attempts, String rewardItemName, String rewardItemID)
     {
         this.puzzleID = puzzleID;
         this.puzzleName = puzzleName;
         this.puzzQuery = puzzQuery;
         this.solution = solution;
         this.attempts = attempts;
-        this.solved = false;
+        this.rewardItemName = rewardItemName;
+        this.rewardItemID = rewardItemID;
+
     }
 
-    public int getPuzzleID()
+    public String getPuzzleID()
     {
         return puzzleID;
-    }
-
-    public void setPuzzleID(int puzzleID)
-    {
-        this.puzzleID = puzzleID;
     }
 
     public boolean isSolved()
@@ -44,29 +36,14 @@ public class Puzzle
         return solved;
     }
 
-    public void setSolved(boolean solved)
-    {
-        this.solved = solved;
-    }
-
     public int getAttempts()
     {
         return attempts;
     }
 
-    public void setAttempts(int attempts)
-    {
-        this.attempts = attempts;
-    }
-
-    public String getSolution()
+    public List<String> getSolution()
     {
         return solution;
-    }
-
-    public void setSolution(String solution)
-    {
-        this.solution = solution;
     }
 
     public String getPuzzQuery()
@@ -74,18 +51,8 @@ public class Puzzle
         return puzzQuery;
     }
 
-    public void setPuzzQuery(String puzzQuery)
-    {
-        this.puzzQuery = puzzQuery;
-    }
-
     public String getPuzzleName()
     {
         return puzzleName;
-    }
-
-    public void setPuzzleName(String puzzleName)
-    {
-        this.puzzleName = puzzleName;
     }
 }

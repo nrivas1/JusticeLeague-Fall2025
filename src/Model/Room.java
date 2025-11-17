@@ -1,27 +1,20 @@
 package Model;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class Room
 {
-    private int roomID;
+    private String roomID;
     private String roomName;
     private String roomDescription;
-    private Map<String, Integer> exits;
+    private Map<String, String> exits;
     private boolean visited;
+    private Monster monster;
+    private List<Artifact> items;
 
-    public Room()
-    {
-        this.roomID = 0;
-        this.roomName = "";
-        this.roomDescription = "";
-        exits = new HashMap<>();
-        visited = false;
-    }
-
-
-    public Room(int roomID, String roomName, String roomDescription, Map<String, Integer> exits)
+    public Room(String roomID, String roomName, String roomDescription, Map<String, String> exits, Monster monster, List<Artifact> items)
     {
         this.roomID = roomID;
         this.roomName = roomName;
@@ -30,14 +23,9 @@ public class Room
         this.visited = false;
     }
 
-    public int getRoomID()
+    public String getRoomID()
     {
         return roomID;
-    }
-
-    public void setRoomID(int roomID)
-    {
-        this.roomID = roomID;
     }
 
     public boolean isVisited()
@@ -55,19 +43,9 @@ public class Room
         return exits;
     }
 
-    public void setExits(Map<String, Integer> exits)
-    {
-        this.exits = exits;
-    }
-
     public String getRoomDescription()
     {
         return roomDescription;
-    }
-
-    public void setRoomDescription(String roomDescription)
-    {
-        this.roomDescription = roomDescription;
     }
 
     public String getRoomName()
@@ -75,8 +53,24 @@ public class Room
         return roomName;
     }
 
-    public void setRoomName(String roomName)
+    public void triggerMonsterEntry()
     {
-        this.roomName = roomName;
+        if (monster != null)
+        {
+            System.out.println(monster.getEnterStatement());
+        }
+    }
+
+    public void triggerMonsterExit()
+    {
+        if (monster != null)
+        {
+            System.out.println(monster.getexitStatement());
+        }
+    }
+
+    public Monster getMonster()
+    {
+        return monster;
     }
 }

@@ -2,52 +2,31 @@ package Model;
 
 public class Artifact
 {
-    private int artifactID;
+    private String artifactID;
     private String artifactName;
     private String artifactDescription;
     private String category;
-    private boolean stun;
-    private int healPoints;
-    private int stunTurns;
+    private int stun;
+    private String attachedPuzzle;
 
-    public Artifact()
-    {
-        this.artifactID = 0;
-        this.artifactName = "";
-        this.artifactDescription = "";
-        this.category = "";
-        this.stun = false;
-        this.healPoints = 0;
-    }
-
-    public Artifact(int artifactID, String artifactName, String artifactDescription, String category, boolean stun, int healPoints)
+    public Artifact(String artifactID, String artifactName, String artifactDescription, int stun, String category)
     {
         this.artifactID = artifactID;
         this.artifactName = artifactName;
         this.artifactDescription = artifactDescription;
         this.category = category;
         this.stun = stun;
-        this.healPoints = healPoints;
     }
 
-    public int getArtifactID()
+    public String getArtifactID()
     {
         return artifactID;
     }
 
-    public void setArtifactID(int artifactID)
-    {
-        this.artifactID = artifactID;
-    }
 
     public String getArtifactName()
     {
         return artifactName;
-    }
-
-    public void setArtifactName(String artifactName)
-    {
-        this.artifactName = artifactName;
     }
 
     public String getArtifactDescription()
@@ -55,48 +34,24 @@ public class Artifact
         return artifactDescription;
     }
 
-    public void setArtifactDescription(String artifactDescription)
-    {
-        this.artifactDescription = artifactDescription;
-    }
 
     public String getCategory()
     {
         return category;
     }
 
-    public void setCategory(String category)
-    {
-        this.category = category;
-    }
-
-    public boolean isStun()
+    public int getStun()
     {
         return stun;
     }
 
-    public void setStun(boolean stun)
+    public boolean canStun()
     {
-        this.stun = stun;
+        return false;
     }
 
-    public int getHealPoints()
+    public String getAttachedPuzzle()
     {
-        return healPoints;
-    }
-
-    public void setHealPoints(int healPoints)
-    {
-        this.healPoints = healPoints;
-    }
-
-    public int getStunTurns()
-    {
-        return stunTurns;
-    }
-
-    public void setStunTurns(int stunTurns)
-    {
-        this.stunTurns = stunTurns;
+        return attachedPuzzle;
     }
 }

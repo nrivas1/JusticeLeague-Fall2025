@@ -26,12 +26,17 @@ public class GameState {
     private Puzzle puzzle;
     private Combat cbt;
 
+    // These are needed for the methods you pasted below
     private PuzzleAttempt activePuzzle;
     private CombatState combat;
 
     public GameState() {
         // empty constructor
     }
+
+    // =====================================================================
+    // New Game
+    // =====================================================================
 
     public void startNewGame(String startRoomID) {
         if (startRoomID != null && roomInd.containsKey(startRoomID)) {
@@ -54,6 +59,10 @@ public class GameState {
         saves = null;
         lastSaved = null;
     }
+
+    // =====================================================================
+    // Rooms / Location
+    // =====================================================================
 
     public Map<String, Room> getRoomIndex() {
         return roomInd;
@@ -90,6 +99,10 @@ public class GameState {
         return Collections.unmodifiableSet(visitedRooms);
     }
 
+    // =====================================================================
+    // Player
+    // =====================================================================
+
     public Player getPlayer() {
         return currentPlayer;
     }
@@ -98,6 +111,10 @@ public class GameState {
         this.currentPlayer = player;
         markDDD();
     }
+
+    // =====================================================================
+    // Puzzles & Monsters
+    // =====================================================================
 
     public void markPuzzleSolved(String puzzleID) {
         if (puzzleID != null) puzzleSolved.put(puzzleID, true);
@@ -139,6 +156,10 @@ public class GameState {
     public Set<String> getCollectedNotes() {
         return Collections.unmodifiableSet(colNotes);
     }
+
+    // =====================================================================
+    // Session / Meta
+    // =====================================================================
 
     public boolean isIntroShown() {
         return showIntro;
@@ -204,6 +225,10 @@ public class GameState {
         rand.setSeed(seed);
     }
 
+    // =====================================================================
+    // Active Puzzle (ephemeral)
+    // =====================================================================
+
     public void startPuzzle(String puzzleId, int attemptsAllowed) {
         if (puzzleId == null || attemptsAllowed < 0) return;
         activePuzzle = new PuzzleAttempt(puzzleId, attemptsAllowed);
@@ -228,6 +253,10 @@ public class GameState {
         return activePuzzle.attemptsRemaining;
     }
 
+    // =====================================================================
+    // Combat (ephemeral)
+    // =====================================================================
+
     public void startCombat(String monsterId, int monsterHp) {
         combat = new CombatState(monsterId, Math.max(0, monsterHp));
     }
@@ -243,6 +272,10 @@ public class GameState {
     public CombatState getCombat() {
         return combat;
     }
+
+    // =====================================================================
+    // Nested lightweight state holders
+    // =====================================================================
 
     /**
      * Tracks an in-progress puzzle the player is currently engaging with.
