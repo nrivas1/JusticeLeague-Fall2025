@@ -1,12 +1,7 @@
 package View;
-import Model.Artifact;
-import Model.Monster;
-import Model.Notes;
-import Model.Player;
-import Model.Puzzle;
-import Model.Room;
-import java.io.File;
-import java.io.IOException;
+import Model.*;
+import Controller.*;
+import java.io.*;
 import java.util.*;
 
 public class Main {
@@ -38,6 +33,12 @@ public class Main {
         }
     }
     public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        String commandsPath = resolvePath(args, 0, "Commands.txt", sc);
+        String roomsPath = resolvePath(args, 1, "Rooms.txt", sc);
+        Commands cmds = new Commands(commandsPath);
+        Map<String, Room> rooms = new LinkedHashMap<>();
+        GameState st = new GameState();
 
     }
 }
