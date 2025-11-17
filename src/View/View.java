@@ -1,7 +1,7 @@
 package View;
 import Model.*;
 
-public class View {
-        }
-    }
-    }
+public class View
+{
+}
+

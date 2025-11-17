@@ -21,6 +21,7 @@ public class GameState {
     private String saves;
     private Instant lastSaved;
     private final Random rand = new Random();
+    private final Map<String, Monster> monsterMap = new LinkedHashMap<>();
 
     // These two were already declared by you (likely your own classes)
     private Puzzle puzzle;
@@ -344,5 +345,10 @@ public class GameState {
         public boolean isMonsterDefeated() {
             return monsterHp <= 0;
         }
+    }
+
+    public Map<String, Monster> getMonsterMap()
+    {
+        return monsterMap;
     }
 }

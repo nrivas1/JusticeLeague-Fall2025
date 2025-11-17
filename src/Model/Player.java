@@ -14,6 +14,7 @@ public class Player
     private ArrayList<Notes> noteInventory = new ArrayList<>(9);
     private Monster monster;
     private Room currentRoom;
+    private Room startingRoom;
 
     public Player(int playerID, String playerName, int lives, int health)
     {
@@ -200,5 +201,31 @@ public class Player
 //                monster.attack(this);
 //            }
 //        }
+    }
+
+    public void takeDamage(int amount)
+    {
+        if (amount <= 0) return;
+
+        health -= amount;
+        System.out.println("You took " + amount +  " damage! Current Health: " + health + "\nCurrent Lives: " + lives);
+
+        if (health <= 0)
+        {
+            lives--;
+            System.out.println("You lost a life. Lives: " + lives);
+        }
+        if (lives > 0)
+        {
+            health = 100;
+            currentRoom = startingRoom;
+            System.out.println("You awakened in the Front yard of the schoo.");
+        }
+        else
+        {
+            health = 0;
+            System.out.println("Game over.");
+            System.exit(0);
+        }
     }
 }
