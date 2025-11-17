@@ -73,4 +73,9 @@ public class Room
     {
         return monster;
     }
+
+    public  List<Artifact> getItems()
+    {
+        return items;
+    }
 }

@@ -228,4 +228,14 @@ public class Player
             System.exit(0);
         }
     }
+
+    public void setCurrentRoom(Room currentRoom)
+    {
+        this.currentRoom = currentRoom;
+    }
+
+    public void setStartingRoom(Room startingRoom)
+    {
+        this.startingRoom = startingRoom;
+    }
 }

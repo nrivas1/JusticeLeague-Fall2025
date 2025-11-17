@@ -37,8 +37,8 @@ public class MonsterLoader
                 String itemDrop =  parts[2].trim();
                 int damageStunned =  Integer.parseInt(parts[3].trim());
                 int damageunstunned =  Integer.parseInt(parts[4].trim());
-                int winChanceWithItem =   Integer.parseInt(parts[5].trim());
-                int winChanceWithoutItem =   Integer.parseInt(parts[6].trim());
+                int winChanceWithItem =   parsePercentage(parts[5].trim());
+                int winChanceWithoutItem =   parsePercentage(parts[6].trim());
                 String enterStatement =  parts[7].trim();
                 String exitStatement =  parts[8].trim();
                 String stunStatement =  parts[9].trim();

@@ -24,7 +24,7 @@ public class RoomLoader
                 if (line.isEmpty() || line.startsWith("#")) continue;
 
                 String[] parts = line.split("\\|");
-                if (parts.length < 13)
+                if (parts.length < 4)
                 {
                     System.out.println("Skipping malformed line " + line);
                     continue;
@@ -35,7 +35,7 @@ public class RoomLoader
                 String description =  parts[2].trim();
 
                 Map<String, String> exits = new LinkedHashMap<>();
-                for (int i = 4; i <= 9; i++)
+                for (int i = 4; i <= 9 && i < parts.length; ++i)
                 {
                     String exitID = parts[i].trim();
                     if (!exitID.equals("0000"))
@@ -44,16 +44,16 @@ public class RoomLoader
                     }
                 }
 
-                String monsterID = parts[10].trim();
+                String monsterID = parts.length > 10 ? parts[10].trim() : "---";
                 Monster monster = monsters.getOrDefault(monsterID, null);
-                String item = parts[11].trim();
+                String item = parts.length > 11 ? parts[11].trim() : "---";
                 List<Artifact> items = new ArrayList<>();
                 if (!item.equals("---"))
                 {
                     for (String itemName : item.split(","))
                     {
                         Artifact artifact = artifacts.get(itemName.trim());
-                        if (item != null) items.add(artifact);
+                        if (artifact != null) items.add(artifact);
                     }
                 }
                 Room room = new Room(id, name, description, exits, monster, items);

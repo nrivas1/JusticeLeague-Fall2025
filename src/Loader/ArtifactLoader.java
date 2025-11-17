@@ -22,6 +22,11 @@ public class ArtifactLoader
                 if (line.trim().isEmpty() || line.startsWith("Item ID")) continue;
 
                 String[] parts =  line.split("\\|");
+
+                for (int i = 0; i < parts.length; i++)
+                {
+                    parts[i] = parts[i].trim();
+                }
                 if (parts.length < 6) continue;
 
                 String id = parts[0];
