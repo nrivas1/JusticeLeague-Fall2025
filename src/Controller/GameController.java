@@ -28,8 +28,7 @@ public class GameController {
         } else {
             vw.println("Welcome back to Remember Me: The Last Semester!");
         }
-        Room current = st.getCurrentRoom();
-        System.out.println("🧪 Current room: " + (current != null ? current.getRoomName() : "null"));
+
 
     }
 
@@ -41,6 +40,19 @@ public class GameController {
                 break;
             }
             handleInput(abr.trim());
+            roamMonsters();
+        }
+    }
+
+    private void roamMonsters()
+    {
+        for (Room room : st.getAllRooms())
+        {
+            Monster m = room.getMonster();
+            if (m != null)
+            {
+                m.roam(st);
+            }
         }
     }
 

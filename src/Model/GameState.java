@@ -76,6 +76,10 @@ public class GameState {
         markDDD();
     }
 
+    public Collection<Room> getAllRooms()
+    {
+        return roomInd.values();
+    }
     public Room getCurrentRoom()
     {
         return player != null ? player.getCurrentRoom() : null;

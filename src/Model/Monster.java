@@ -1,5 +1,10 @@
 package Model;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Random;
+
 public class Monster
 {
     private String monsterID;
@@ -9,6 +14,7 @@ public class Monster
     private int winChanceWithItem, winChanceWithoutItem;
     private String enterStatement, exitStatement, stunStatement, runstatement, movement, specialBehavior;
     private Room currentRoom;
+    private String currentRoomID;
 
     public Monster(String monsterID, String monsterName, String itemDrop, int damagedStunned, int damagedUnstunned,
                    int winChanceWithItem, int winChanceWithoutItem, String enterStatement, String exitStatement,
@@ -85,5 +91,30 @@ public class Monster
     public Room getCurrentRoom()
     {
         return currentRoom;
+    }
+
+    public void setCurrentRoomID(String currentRoomID)
+    {
+        this.currentRoomID = currentRoomID;
+    }
+
+    public String getCurrentRoomID()
+    {
+        return currentRoomID;
+    }
+
+    public void roam(GameState state) {
+        Room currentRoom = state.getRoomByID(this.getCurrentRoom().getRoomID());
+        if (currentRoom == null) return;
+        Map<String, String> exits = currentRoom.getExits();
+        if (exits == null || exits.isEmpty()) return;
+
+        List<String> destinations = new ArrayList<>(exits.values());
+        String nextRoomId = destinations.get(new Random().nextInt(destinations.size()));
+        Room nextRoom = state.getRoomByID(nextRoomId);
+
+        currentRoom.setMonster(null);
+        nextRoom.setMonster(this);
+        this.setCurrentRoomID(nextRoomId);
     }
 }

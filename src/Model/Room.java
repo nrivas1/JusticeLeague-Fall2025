@@ -74,6 +74,11 @@ public class Room
         return monster;
     }
 
+    public void setMonster(Monster m)
+    {
+        this.monster = m;
+    }
+
     public  List<Artifact> getItems()
     {
         return items;
