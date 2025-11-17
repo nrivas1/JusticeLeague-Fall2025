@@ -12,31 +12,3 @@ I_13 | Torso | A dismembered torse, scarred and intact, dried flecks of blood st
 I_14 | Paintbrush | A slender paintbrush with frayed bristles and dried pigment clinging desperately to its tip. Can be used in combat against monster. Will stun monster for 1 action. | Weapon | 1 | --
 I_15 | HDMI Cable | A standard HDMI with slightly frayed ends, used to transmit video and audio signals. Can be used in combat against monsters. Will stun monster for 2 actions. | Weapon | 2 | --
 I_16 | 32 oz Water Bottle | A dented metal reusable water bottle, cool to the touch and half full, useful for staying hydrated - or hitting a monster. Can be used in combat against monster. Will stun monster for 3 actions. | Weapon | 3 | --
-
-private Room currentRoom;
-    private boolean showIntro;
-    private Map<String, Room> rooms;
-
-    public Room getCurrentRoom() {
-        return currentRoom;
-    }
-
-    public void setCurrentRoom(Room currentRoom) {
-        this.currentRoom = currentRoom;
-    }
-
-    public Map<String, Room> getRooms() {
-        return rooms;
-    }
-
-    public void setRooms(Map<String, Room> rooms) {
-        this.rooms = rooms;
-    }
-
-    public boolean isShowIntro() {
-        return showIntro;
-    }
-
-    public void setShowIntro(boolean showIntro) {
-        this.showIntro = showIntro;
-    }
