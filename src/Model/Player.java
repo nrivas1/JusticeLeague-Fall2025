@@ -172,7 +172,7 @@ public class Player
 
         for (Artifact artifact : inventory)
         {
-            if (artifact.getArtifactName().equalsIgnoreCase("Bandage"))
+            if (artifact.getArtifactName().equalsIgnoreCase("Band-Aid"))
             {
                 hasBandage = true;
                 break;
@@ -181,17 +181,17 @@ public class Player
 
         if (!hasBandage)
         {
-            System.out.println("I need to find a bandage to heal.");
+            System.out.println("I need to find a Band-Aid to heal.");
         }
 
-        if (equippedArtifact == null || !equippedArtifact.getArtifactName().equalsIgnoreCase("Bandage"))
+        if (equippedArtifact == null || !equippedArtifact.getArtifactName().equalsIgnoreCase("Band-Aid"))
         {
-            System.out.println("I must equip my bandage to heal.");
+            System.out.println("I must equip my Band-Aid to heal.");
             return;
         }
 
         health = Math.min(health + healAmount, maxHealth);
-        System.out.println("I used the bandage to heal myself. My current health: " + health);
+        System.out.println("I used the Band-Aid to heal myself. My current health: " + health);
 
 // Will implement this later.
 //        if (monster != null)
