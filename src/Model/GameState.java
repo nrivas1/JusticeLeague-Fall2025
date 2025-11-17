@@ -23,6 +23,7 @@ public class GameState {
     private final Random rand = new Random();
     private Map<String, Monster> monsterMap = new LinkedHashMap<>();
     private Map<String, Artifact> itemMap = new LinkedHashMap<>();
+    private Player player;
 
     // These two were already declared by you (likely your own classes)
     private Puzzle puzzle;
@@ -77,7 +78,7 @@ public class GameState {
 
     public Room getCurrentRoom()
     {
-        return currentRoom;
+        return player != null ? player.getCurrentRoom() : null;
     }
 
     public void setCurrentRoom(Room currentRoom) {
@@ -107,12 +108,11 @@ public class GameState {
     // =====================================================================
 
     public Player getPlayer() {
-        return currentPlayer;
+        return player;
     }
 
     public void setPlayer(Player player) {
-        this.currentPlayer = player;
-        markDDD();
+        this.player = player;
     }
 
     // =====================================================================

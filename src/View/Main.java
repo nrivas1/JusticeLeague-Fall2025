@@ -74,6 +74,8 @@ public class Main {
             View view = new View();
             Commands command = new Commands("Commands.txt");
             GameController controller = new GameController(sc, gs, command, view);
+            System.out.println("🧪 Starting room: " + (startingRoom != null ? startingRoom.getRoomName() : "null"));
+
             controller.start();
 
         } catch (Exception e) {
