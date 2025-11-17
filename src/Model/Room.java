@@ -1,5 +1,6 @@
 package Model;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -79,8 +80,10 @@ public class Room
         this.monster = m;
     }
 
-    public  List<Artifact> getItems()
-    {
-        return items;
+    public List<Artifact> getItems() {
+        if (this.items == null) {
+            this.items = new ArrayList<>();
+        }
+        return this.items;
     }
 }
