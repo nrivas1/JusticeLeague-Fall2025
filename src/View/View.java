@@ -29,4 +29,44 @@ public class View {
     public void prompt() {
         System.out.print("> ");
     }
+
+    public void printRoom(Room room)
+    {
+        if (room == null)
+        {
+            System.out.println("No room data available.");
+            return;
+        }
+
+        System.out.println(room.getRoomName());
+        System.out.println(room.getRoomDescription());
+
+        Monster monster = room.getMonster();
+        if (monster != null)
+        {
+            System.out.println(monster.getEnterStatement());
+        }
+
+        List<Artifact> items = room.getItems();
+        if (items != null && !items.isEmpty())
+        {
+            System.out.println("Items in this room: ");
+            for (Artifact artifact : items)
+            {
+                System.out.println("-" + artifact.getArtifactName());
+            }
+        }
+
+        Map<String, String> exits = room.getExits();
+        if (exits == null || exits.isEmpty())
+        {
+            System.out.println("This room has no exits.");
+        }
+        else
+        {
+            System.out.println("Exits: " + exits.keySet());
+        }
+    }
+
+
 }

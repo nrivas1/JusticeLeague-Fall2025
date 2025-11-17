@@ -23,6 +23,7 @@ public class GameController {
         gRunning = true;
         if (!st.isIntroShown()) {
             vw.println("Welcome to Remember Me: The Last Semester!");
+            vw.printRoom(st.getCurrentRoom());
             runLoop();
         } else {
             vw.println("Welcome back to Remember Me: The Last Semester!");
@@ -77,5 +78,29 @@ public class GameController {
             return;
         }
         vw.printExits(rm);
+    }
+
+    public void handleMovement(String exit)
+    {
+        Room current = st.getCurrentRoom();
+        if (current == null) {
+            vw.println("You're nowhere, That's a problem.");
+            return;
+        }
+
+        String destination = current.getExits().get(exit);
+        if (destination == null) {
+            vw.println("That exit doesn't exits.");
+            return;
+        }
+
+        Room nextRoom = st.getRoomByID(destination);
+        if (nextRoom == null) {
+            vw.println("Room not found.");
+            return;
+        }
+
+        st.setCurrentRoom(nextRoom);
+        vw.printRoom(nextRoom);
     }
 }

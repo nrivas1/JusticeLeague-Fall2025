@@ -16,7 +16,7 @@ public class PuzzleLoader
             while (scanner.hasNextLine())
             {
                 String line = scanner.nextLine().trim();
-                if (line.isEmpty() || line.startsWith("#")) continue;
+                if (line.isEmpty() || line.startsWith("#") || line.toLowerCase().contains("attempt")) continue;
 
                 String[] parts = line.split("\\|");
                 if (parts.length != 7) continue;
@@ -25,7 +25,14 @@ public class PuzzleLoader
                 String name = parts[1].trim();
                 String query = parts[2].trim();
                 String solution = parts[3].trim();
-                int attempts = Integer.parseInt(parts[4].trim());
+                int attempts;
+                try {
+                    attempts = Integer.parseInt(parts[4].trim());
+                }
+                catch (NumberFormatException e) {
+                    System.out.println("Invalid attempt number");
+                    continue;
+                }
                 String rewardName = parts[5].trim();
                 String rewardID = parts[6].trim();
 

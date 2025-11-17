@@ -21,7 +21,8 @@ public class GameState {
     private String saves;
     private Instant lastSaved;
     private final Random rand = new Random();
-    private final Map<String, Monster> monsterMap = new LinkedHashMap<>();
+    private Map<String, Monster> monsterMap = new LinkedHashMap<>();
+    private Map<String, Artifact> itemMap = new LinkedHashMap<>();
 
     // These two were already declared by you (likely your own classes)
     private Puzzle puzzle;
@@ -74,7 +75,8 @@ public class GameState {
         markDDD();
     }
 
-    public Room getCurrentRoom() {
+    public Room getCurrentRoom()
+    {
         return currentRoom;
     }
 
@@ -347,8 +349,20 @@ public class GameState {
         }
     }
 
-    public Map<String, Monster> getMonsterMap()
+    public void setMonsterMap (Map<String, Monster> monsterMap)
     {
-        return monsterMap;
+        this.monsterMap = (monsterMap != null) ? new LinkedHashMap<>(monsterMap) : new LinkedHashMap<>();
+        markDDD();
     }
+
+    public void setItemMap(Map<String, Artifact> itemMap)
+    {
+        this.itemMap = (itemMap != null) ? new LinkedHashMap<>(itemMap) : new LinkedHashMap<>();
+    }
+
+    public Room getRoomByID(String id)
+    {
+        return roomInd.get(id);
+    }
+
 }
