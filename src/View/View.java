@@ -64,7 +64,8 @@ public class View {
         }
         else
         {
-            System.out.println("Exits: " + exits.keySet());
+            System.out.println("Exits: ");
+            System.out.println(exits.values());
         }
     }
 

@@ -238,4 +238,9 @@ public class Player
     {
         this.startingRoom = startingRoom;
     }
+
+    public Room getCurrentRoom()
+    {
+        return currentRoom;
+    }
 }

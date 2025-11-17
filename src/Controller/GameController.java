@@ -28,6 +28,9 @@ public class GameController {
         } else {
             vw.println("Welcome back to Remember Me: The Last Semester!");
         }
+        Room current = st.getCurrentRoom();
+        System.out.println("🧪 Current room: " + (current != null ? current.getRoomName() : "null"));
+
     }
 
     private void runLoop() {
@@ -63,6 +66,12 @@ public class GameController {
             return;
         }
 
+        if (lowerCase.startsWith("go ")) {
+            String target = abr.substring(3).trim();
+            handleMovement(target);
+            return;
+        }
+
         vw.println("Unknown/Wrong command. Type 'Commands' to view a list of viable commands.");
     }
 
@@ -89,11 +98,15 @@ public class GameController {
         }
 
         String destination = current.getExits().get(exit);
-        if (destination == null) {
-            vw.println("That exit doesn't exits.");
-            return;
+        if (destination == null && st.getRoomByID(exit) != null) {
+            destination = exit;
         }
 
+        if (destination == null)
+        {
+            vw.println("No exit or room found for: " + exit);
+            return;
+        }
         Room nextRoom = st.getRoomByID(destination);
         if (nextRoom == null) {
             vw.println("Room not found.");
