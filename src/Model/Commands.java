@@ -78,6 +78,15 @@ public class Commands {
         return f;
     }
 
+    public void showCommand(Commands command)
+    {
+        System.out.println("Available commands:");
+        for (Command cmd :  command.listAll())
+        {
+            System.out.printf( "%-15s — %s%n", cmd.cmdName(), cmd.cmdDescription());
+        }
+
+    }
     public String getName() {
         return cache.get(0).cmdName();
     }
