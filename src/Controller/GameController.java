@@ -73,6 +73,12 @@ public class GameController {
             return;
         }
 
+        if (lowerCase.equals("hint")) {
+            vw.println("🎯 Main Objective: Collect all 6 body parts scattered throughout the school and make your way to the back gate to escape.");
+            vw.println("hint: Most body parts are locked in a puzzle except one.");
+            return;
+        }
+
         if (lowerCase.equals("exits")) {
             displayExits();
             return;

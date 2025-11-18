@@ -7,7 +7,7 @@ import java.util.Map;
 
 public class View {
     public void printHelp(List<Commands.Command> entries){
-        System.out.println("In game commands: \n");
+        System.out.println("-------------------- COMMAND LIST ----------------------- \n");
         for (Commands.Command cmd : entries) {
             System.out.println(cmd.cmdName() + ": " + cmd.cmdDescription());
         }

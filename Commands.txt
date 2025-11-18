@@ -6,7 +6,7 @@ Inventory | Type 'Inventory' to pull up the list of items in Player's inventory 
 Note Inventory | Type 'Note Inventory' to pull up the list of notes that Player has picked up throughout the game. | global
 Attack | Type 'Attack' to battle the monster with or without an equipped item. | local
 Heal | Enter 'Heal' to use a bandage. Bandage must be equipped. | local
-Help | Pulls up a hint about objective. | global
+hint | Pulls up a hint about objective. | global
 Read + 'note name' | Reads the information on picked up note. | global
 Escape | Enter 'Escape' to attempt to open the gate in the backyard. | local
 Commands | Pulls up command list. | global
