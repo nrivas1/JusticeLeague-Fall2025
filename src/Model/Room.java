@@ -99,7 +99,10 @@ public class Room
     {
         monsters.add(m);
     }
-
+    public boolean hasMonster()
+    {
+        return this.monster != null;
+    }
     public  List<Artifact> getItems()
     {
         return items;
@@ -136,7 +139,8 @@ public class Room
             notes = new ArrayList<>();
         }
         notes.add(note);
-    }public Puzzle getPuzzle() {
+    }
+    public Puzzle getPuzzle() {
     return puzzle;
 }
 

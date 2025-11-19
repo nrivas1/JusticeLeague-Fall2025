@@ -51,7 +51,7 @@ public class MonsterLoader
 
 
                 Monster monster = new Monster(id, name, itemDrop, damageStunned, damageunstunned, winChanceWithItem
-                , winChanceWithoutItem, enterStatement, exitStatement, stunStatement, runStatement, movement,
+                        , winChanceWithoutItem, enterStatement, exitStatement, stunStatement, runStatement, movement,
                         specialBehavior);
                 monster.setCurrentRoomID(roomID);
 
@@ -65,6 +65,12 @@ public class MonsterLoader
         return  monsterMap;
     }
 
+    /**
+     * Assigns monsters to their respective rooms based on their current room ID.
+     *
+     * @param monsterMap Map of monster ID to Monster objects
+     * @param roomMap Map of room ID to Room objects
+     */
     public static void monsterRoom(Map<String, Monster> monsterMap, Map<String, Room> roomMap)
     {
         for (Monster monster : monsterMap.values())
@@ -82,6 +88,12 @@ public class MonsterLoader
         }
     }
 
+    /**
+     * Parses a percentage string and removes the % symbol.
+     *
+     * @param s The percentage string (e.g., "50%")
+     * @return The integer value of the percentage
+     */
     private static int parsePercentage(String s)
     {
         return Integer.parseInt(s.replaceAll("%", "").trim());

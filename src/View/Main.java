@@ -88,11 +88,11 @@ public class Main {
             MonsterLoader.monsterRoom(monsterMap, roomMap);
             PuzzleLoader.assignPuzzles(roomPuzzlesPath, puzzleMap, roomMap);
 
-            for (Room r : roomMap.values()) {
+            /*for (Room r : roomMap.values()) {
                 if (r.getPuzzle() != null) {
                     System.out.println(r.getRoomID() + " => " + r.getPuzzle().getPuzzleName());
                 }
-            }
+            }*/
 
 
             gs = new GameState();

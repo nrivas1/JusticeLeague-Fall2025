@@ -14,7 +14,6 @@ public class Combat
         this.player = player;
         this.monster = monster;
     }
-
     public static boolean engageFight(Player player, Monster monster, Artifact artifact)
     {
         boolean hasWeapon = artifact != null;
