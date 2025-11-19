@@ -2,6 +2,8 @@ package View;
 import Loader.*;
 import Model.*;
 import Controller.GameController;
+import Utils.SaveManager;
+
 import java.io.*;
 import java.util.*;
 
@@ -11,12 +13,7 @@ public class Main {
         if (args.length > index && !args[index].trim().isEmpty()) {
             return args[index].trim();
         }
-        if (new File(defName).exists()) {
             return defName;
-        }
-        System.out.print("Enter path " + defName + ": ");
-        String input = sc.nextLine().trim();
-        return input.isEmpty() ? null : input;
     }
 
     //Help Command
@@ -35,31 +32,63 @@ public class Main {
 
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
-        Map<String, Room> rooms = new LinkedHashMap<>();
-
         Main main = new Main();
-        main.startNewGame(args, sc);
+        main.startGame(args, sc);
+    }
 
+    //starting game flow
+    public void startGame(String[] args, Scanner sc)
+    {
+        System.out.println("Load saved game?: (y/n)");
+        String choice = sc.nextLine().trim().toLowerCase();
+
+        if (choice.equals("y"))
+        {
+            System.out.println("Enter save file: ");
+            String saveFile = sc.nextLine().trim();
+            GameState gs = SaveManager.loadGame(saveFile);
+            if (gs == null)
+            {
+                View vw = new View();
+                Commands command = new Commands("Commands.txt");
+                GameController controller = new GameController(sc, gs, command, vw);
+                controller.start();
+                return;
+            }
+            else
+            {
+                System.out.println("Could not load game. Starting a new Game.");
+            }
+        }
+        startNewGame(args, sc);
     }
 
     public void startNewGame(String[] args, Scanner sc) {
         try {
             String roomPath = resolvePath(args, 0, "Rooms.txt", sc);
-            String monsterPath =  resolvePath(args, 1, "Monsters.txt", sc);
-            String itemPath =  resolvePath(args, 2, "Items.txt", sc);
-            String puzzlePath =  resolvePath(args, 3, "Puzzle.txt", sc);
-            String notesPath =  resolvePath(args, 4, "Notes.txt", sc);
+            String monsterPath = resolvePath(args, 1, "Monsters.txt", sc);
+            String itemPath = resolvePath(args, 2, "Items.txt", sc);
+            String puzzlePath = resolvePath(args, 3, "Puzzles.txt", sc);
+            String notesPath = resolvePath(args, 4, "Notes.txt", sc);
+            String roomItemsPath = resolvePath(args, 5, "RoomItems.txt", sc);
+            String roomNotesPath = resolvePath(args, 6, "RoomNotes.txt", sc);
 
             Map<String, Artifact> itemMap = ArtifactLoader.loadArtifacts(itemPath);
-            Map<String, Monster>  monsterMap = MonsterLoader.loadMonsters(monsterPath);
+            Map<String, Monster> monsterMap = MonsterLoader.loadMonsters(monsterPath);
             Map<String, Puzzle> puzzleMap = PuzzleLoader.loadPuzzles(puzzlePath);
             Map<String, Notes> notesMap = NotesLoader.loadNotes(notesPath);
             Map<String, Room> roomMap = RoomLoader.loadRooms(roomPath, monsterMap, itemMap);
+            ArtifactLoader.assignItems(roomItemsPath, itemMap, roomMap);
+            NotesLoader.assignNotes(roomNotesPath, notesMap, roomMap);
+            MonsterLoader.monsterRoom(monsterMap, roomMap);
+
+
 
             GameState gs = new GameState();
             gs.setRoomIndex(roomMap);
             gs.setMonsterMap(monsterMap);
             gs.setItemMap(itemMap);
+            gs.setNotesMap(notesMap);
 
             Player player = new Player(1, "Player", 3, 100);
             Room startingRoom = roomMap.get("F1_1");
@@ -74,7 +103,6 @@ public class Main {
             View view = new View();
             Commands command = new Commands("Commands.txt");
             GameController controller = new GameController(sc, gs, command, view);
-            System.out.println("🧪 Starting room: " + (startingRoom != null ? startingRoom.getRoomName() : "null"));
 
             controller.start();
 
@@ -82,7 +110,5 @@ public class Main {
             System.out.println(" Error starting game: " + e.getMessage());
         }
     }
-
-
 
 }

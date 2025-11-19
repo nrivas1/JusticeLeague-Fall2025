@@ -1,11 +1,13 @@
 package Loader;
 
 import Model.Monster;
+import Model.Room;
 
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.math.RoundingMode;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
@@ -26,7 +28,7 @@ public class MonsterLoader
 
                 String[] parts = line.split("\\|");
 
-                if (parts.length < 12)
+                if (parts.length < 14)
                 {
                     System.out.println("Skipping line " + line);
                     continue;
@@ -45,10 +47,13 @@ public class MonsterLoader
                 String runStatement =  parts[10].trim();
                 String movement =   parts[11].trim();
                 String specialBehavior =  parts.length > 12 ? parts[12].trim() : "";
+                String roomID = parts.length > 13 ? parts[13].trim() : "";
+
 
                 Monster monster = new Monster(id, name, itemDrop, damageStunned, damageunstunned, winChanceWithItem
                 , winChanceWithoutItem, enterStatement, exitStatement, stunStatement, runStatement, movement,
                         specialBehavior);
+                monster.setCurrentRoomID(roomID);
 
                 monsterMap.put(id, monster);
             }
@@ -58,6 +63,23 @@ public class MonsterLoader
             System.out.println("Monster file not found: " + e.getMessage());
         }
         return  monsterMap;
+    }
+
+    public static void monsterRoom(Map<String, Monster> monsterMap, Map<String, Room> roomMap)
+    {
+        for (Monster monster : monsterMap.values())
+        {
+            String roomID = monster.getCurrentRoomID();
+            Room room = roomMap.get(roomID);
+            if (room != null)
+            {
+                room.addMonster(monster);
+            }
+            else
+            {
+                System.out.println("Monster " + monster.getMonsterName() + " has an invalid starting room " + roomID);
+            }
+        }
     }
 
     private static int parsePercentage(String s)

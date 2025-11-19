@@ -14,12 +14,20 @@ public class View {
     }
 
     public void printExits(Room rm) {
-        Map<String, String> exits = rm.getExits();
+        Map<String, String> exits = rm.getExits(); // exitName → roomID
+
         if (exits == null || exits.isEmpty()) {
             System.out.println("This room has no exits.");
-        } else {
-            System.out.println("Exits out of this room are: <" + exits + ">");
+            return;
         }
+
+        System.out.println("Exits:");
+        for (Map.Entry<String, String> entry : exits.entrySet()) {
+            String exitName = entry.getKey();
+            String targetRoomID = entry.getValue();
+            System.out.println("• " + exitName + " → " + targetRoomID + " ");
+        }
+
     }
 
     public void println(String s){

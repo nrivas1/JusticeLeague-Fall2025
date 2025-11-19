@@ -1,12 +1,14 @@
 package Model;
 
+import java.io.Serializable;
 import java.util.Map;
 
-public class Notes
+public class Notes implements Serializable
 {
     private String noteName;
     private String noteDescription;
     private Map<Room, Integer> noteMap;
+    private String locationID;
 
 
     public Notes(String noteName, String noteDescription)
@@ -24,4 +26,15 @@ public class Notes
     {
         return noteDescription;
     }
+
+    public String getLocationID()
+    {
+        return locationID;
+    }
+
+    public void setLocationID(String locationID)
+    {
+        this.locationID = locationID;
+    }
+
 }

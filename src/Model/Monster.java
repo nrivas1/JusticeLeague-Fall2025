@@ -1,11 +1,12 @@
 package Model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
-public class Monster
+public class Monster implements Serializable
 {
     private String monsterID;
     private String monsterName;
@@ -15,6 +16,11 @@ public class Monster
     private String enterStatement, exitStatement, stunStatement, runstatement, movement, specialBehavior;
     private Room currentRoom;
     private String currentRoomID;
+    private boolean stunned;
+    private int stunsRemaining;
+    private String homeFloor;
+    private String lastSeenFloor = null;
+    private String lastSeenByRoom = null;
 
     public Monster(String monsterID, String monsterName, String itemDrop, int damagedStunned, int damagedUnstunned,
                    int winChanceWithItem, int winChanceWithoutItem, String enterStatement, String exitStatement,
@@ -48,6 +54,33 @@ public class Monster
         return monsterName;
     }
 
+    public boolean isStunned()
+    {
+        return stunned;
+    }
+
+    public void setStunned(boolean stunned)
+    {
+        this.stunned = stunned;
+    }
+
+    public void setStunRemaining(int stuns)
+    {
+        this.stunsRemaining = stuns;
+    }
+
+    public void decreaseStunned()
+    {
+        if (stunsRemaining > 0)
+        {
+            stunsRemaining--;
+            if (stunsRemaining == 0)
+            {
+                stunned = false;
+            }
+        }
+    }
+
     public int getDamagedStunned() {
         return damagedStunned;
     }
@@ -68,7 +101,7 @@ public class Monster
         return enterStatement;
     }
 
-    public String getexitStatement() {
+    public String getExitStatement() {
         return exitStatement;
     }
 
@@ -103,18 +136,34 @@ public class Monster
         return currentRoomID;
     }
 
-    public void roam(GameState state) {
-        Room currentRoom = state.getRoomByID(this.getCurrentRoom().getRoomID());
-        if (currentRoom == null) return;
-        Map<String, String> exits = currentRoom.getExits();
-        if (exits == null || exits.isEmpty()) return;
-
-        List<String> destinations = new ArrayList<>(exits.values());
-        String nextRoomId = destinations.get(new Random().nextInt(destinations.size()));
-        Room nextRoom = state.getRoomByID(nextRoomId);
-
-        currentRoom.setMonster(null);
-        nextRoom.setMonster(this);
-        this.setCurrentRoomID(nextRoomId);
+    public String getHomeFloor()
+    {
+        return homeFloor;
     }
+
+    public void setHomeFloor(String floor)
+    {
+        this.homeFloor = floor;
+    }
+
+    public String getLastSeenFloor()
+    {
+        return lastSeenFloor;
+    }
+
+    public void setLastSeenFloor(String lastSeenFloor)
+    {
+        this.lastSeenFloor = lastSeenFloor;
+    }
+
+    public String getLastSeenByRoom()
+    {
+        return lastSeenByRoom;
+    }
+
+    public void setLastSeenByRoom(String lastSeenByRoom)
+    {
+        this.lastSeenByRoom = lastSeenByRoom;
+    }
+
 }
