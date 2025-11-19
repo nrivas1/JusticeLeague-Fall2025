@@ -1,8 +1,11 @@
 package Model;
 
+import View.View;
+
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Player
+public class Player implements Serializable
 {
     private int playerID;
     private String playerName;
@@ -23,7 +26,7 @@ public class Player
         this.lives = lives;
         this.health = health;
         this.canStun = false;
-        this.inventory = new ArrayList<>();
+        this.inventory = new ArrayList<>(10);
     }
 
     public int getPlayerID()
@@ -66,7 +69,7 @@ public class Player
     {
         for (Artifact artifact : inventory)
         {
-            if (artifact.getArtifactName().equals(itemName) && artifact.canStun())
+            if (artifact.getArtifactName().equalsIgnoreCase(itemName))
             {
                 if (equippedArtifact != null)
                 {
@@ -96,7 +99,13 @@ public class Player
         System.out.println("Picked up: " + artifact.getArtifactName());
     }
 
-    public void drop(Artifact artifact)
+    public void pickUp(Notes Note)
+    {
+        noteInventory.add(Note);
+        System.out.println("Collected " + Note.getNoteName());
+    }
+
+    public void drop(Artifact artifact, Room currentRoom)
     {
         if (!inventory.contains(artifact))
         {
@@ -105,6 +114,8 @@ public class Player
         }
 
         inventory.remove(artifact);
+        currentRoom.addArtifact(artifact);
+        artifact.setLocationID(currentRoom.getRoomID());
         System.out.println("Dropped: " + artifact.getArtifactName());
     }
 
@@ -114,20 +125,20 @@ public class Player
         System.out.println("Lives: " + lives + "/3");
     }
 
-    public void viewItemInventory()
+    public void viewItemInventory(View vw)
     {
-        System.out.println("Inventory: ");
-        if (inventory.isEmpty())
+        if (inventory == null || inventory.isEmpty())
         {
             System.out.println("I haven't collected any items yet.");
+            return;
         }
-        else
-        {
+
+        System.out.println("Inventory: ");
             for (Artifact artifact : inventory)
             {
-                System.out.println(artifact.getArtifactName());
+                System.out.println("• " + artifact.getArtifactName() + ": " + artifact.getArtifactDescription());
             }
-        }
+
     }
 
     public void viewNoteInventory()

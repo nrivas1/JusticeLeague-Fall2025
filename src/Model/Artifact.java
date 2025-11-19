@@ -8,6 +8,7 @@ public class Artifact
     private String category;
     private int stun;
     private String attachedPuzzle;
+    private String locationID;
 
     public Artifact(String artifactID, String artifactName, String artifactDescription, int stun, String category)
     {
@@ -53,5 +54,15 @@ public class Artifact
     public String getAttachedPuzzle()
     {
         return attachedPuzzle;
+    }
+
+    public String getLocationID()
+    {
+        return locationID;
+    }
+
+    public void setLocationID(String locationID)
+    {
+        this.locationID = locationID;
     }
 }
