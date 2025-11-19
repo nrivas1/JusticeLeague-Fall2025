@@ -148,6 +148,22 @@ public class GameController {
             return;
         }
 
+        if (lowerCase.equals("map")) {
+            handleMap();
+            return;
+        }
+
+        if (lowerCase.equals("note inventory")) {
+            st.getPlayer().viewNoteInventory();
+            return;
+        }
+
+        if (lowerCase.startsWith("read ")) {
+            String noteName = abr.substring(5).trim();
+            st.getPlayer().readNote(noteName);
+            return;
+        }
+
         if (lowerCase.equalsIgnoreCase("inventory"))
         {
             st.getPlayer().viewItemInventory(vw);
@@ -201,6 +217,18 @@ public class GameController {
 
 
         vw.println("Unknown/Wrong command. Type 'Commands' to view a list of viable commands.");
+    }
+
+    public void handleMap()
+    {
+        Room current = st.getCurrentRoom();
+        if (current == null)
+        {
+            vw.println("You seem to be lost in the void. No map available.");
+            return;
+        }
+
+        vw.printMap(current, st.getRooms());
     }
 
     public void handleExplore()

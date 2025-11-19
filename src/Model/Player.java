@@ -163,7 +163,9 @@ public class Player implements Serializable
         {
             if (note.getNoteName().equalsIgnoreCase(noteName))
             {
-                System.out.println(note.getNoteName() + ":\n" + note.getNoteDescription());
+                System.out.println("\n--- " + note.getNoteName() + " ---");
+                System.out.println(note.getNoteDescription());
+                System.out.println("------------------------------\n");
                 return;
             }
         }

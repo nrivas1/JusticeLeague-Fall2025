@@ -64,6 +64,8 @@ public class Main {
     }
 
     public void startNewGame(String[] args, Scanner sc) {
+        Map<String, Room> roomMap = null;
+        GameState gs = null;
         try {
             String roomPath = resolvePath(args, 0, "Rooms.txt", sc);
             String monsterPath = resolvePath(args, 1, "Monsters.txt", sc);
@@ -77,14 +79,13 @@ public class Main {
             Map<String, Monster> monsterMap = MonsterLoader.loadMonsters(monsterPath);
             Map<String, Puzzle> puzzleMap = PuzzleLoader.loadPuzzles(puzzlePath);
             Map<String, Notes> notesMap = NotesLoader.loadNotes(notesPath);
-            Map<String, Room> roomMap = RoomLoader.loadRooms(roomPath, monsterMap, itemMap);
+            roomMap = RoomLoader.loadRooms(roomPath, monsterMap, itemMap);
             ArtifactLoader.assignItems(roomItemsPath, itemMap, roomMap);
             NotesLoader.assignNotes(roomNotesPath, notesMap, roomMap);
             MonsterLoader.monsterRoom(monsterMap, roomMap);
 
 
-
-            GameState gs = new GameState();
+            gs = new GameState();
             gs.setRoomIndex(roomMap);
             gs.setMonsterMap(monsterMap);
             gs.setItemMap(itemMap);
@@ -109,6 +110,16 @@ public class Main {
         } catch (Exception e) {
             System.out.println(" Error starting game: " + e.getMessage());
         }
+
+        Player player = new Player(1, "Player", 3, 100);
+        Room startingRoom = roomMap.get("F1_1");
+        if (startingRoom == null) {
+            System.out.println("No room found");
+            return;
+        }
+        player.setStartingRoom(startingRoom);
+        player.setCurrentRoom(startingRoom);
+        gs.setPlayer(player);
     }
 
 }
