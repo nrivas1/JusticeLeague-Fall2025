@@ -16,6 +16,7 @@ public class Room
     private List<Artifact> items;
     private List<Monster> monsters;
     private List<Notes> notes;
+    private Puzzle puzzle;
 
     public Room(String roomID, String roomName, String roomDescription, Map<String, String> exits, Monster monster, List<Artifact> items)
     {
@@ -135,5 +136,11 @@ public class Room
             notes = new ArrayList<>();
         }
         notes.add(note);
+    }public Puzzle getPuzzle() {
+    return puzzle;
+}
+
+    public void setPuzzle(Puzzle puzzle) {
+        this.puzzle = puzzle;
     }
 }

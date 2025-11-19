@@ -74,6 +74,9 @@ public class Main {
             String notesPath = resolvePath(args, 4, "Notes.txt", sc);
             String roomItemsPath = resolvePath(args, 5, "RoomItems.txt", sc);
             String roomNotesPath = resolvePath(args, 6, "RoomNotes.txt", sc);
+            String roomPuzzlesPath = resolvePath(args, 7, "roomPuzzles.txt", sc);
+
+
 
             Map<String, Artifact> itemMap = ArtifactLoader.loadArtifacts(itemPath);
             Map<String, Monster> monsterMap = MonsterLoader.loadMonsters(monsterPath);
@@ -83,6 +86,13 @@ public class Main {
             ArtifactLoader.assignItems(roomItemsPath, itemMap, roomMap);
             NotesLoader.assignNotes(roomNotesPath, notesMap, roomMap);
             MonsterLoader.monsterRoom(monsterMap, roomMap);
+            PuzzleLoader.assignPuzzles(roomPuzzlesPath, puzzleMap, roomMap);
+
+            for (Room r : roomMap.values()) {
+                if (r.getPuzzle() != null) {
+                    System.out.println(r.getRoomID() + " => " + r.getPuzzle().getPuzzleName());
+                }
+            }
 
 
             gs = new GameState();
@@ -90,6 +100,7 @@ public class Main {
             gs.setMonsterMap(monsterMap);
             gs.setItemMap(itemMap);
             gs.setNotesMap(notesMap);
+            gs.setPuzzles(puzzleMap);
 
             Player player = new Player(1, "Player", 3, 100);
             Room startingRoom = roomMap.get("F1_1");
