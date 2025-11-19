@@ -7,7 +7,7 @@ import java.util.Map;
 
 public class View {
     public void printHelp(List<Commands.Command> entries){
-        System.out.println("In game commands: \n");
+        System.out.println("-------------------- COMMAND LIST ----------------------- \n");
         for (Commands.Command cmd : entries) {
             System.out.println(cmd.cmdName() + ": " + cmd.cmdDescription());
         }
@@ -75,6 +75,49 @@ public class View {
             System.out.println("Exits: ");
             System.out.println(exits.values());
         }
+    }
+
+    //shows a map of the current floor the player is in and shows which room the player is currently in
+    public void printMap(Room current, Map<String, Room> allRooms)
+    {
+        if (current == null || allRooms == null || allRooms.isEmpty())
+        {
+            System.out.println("No map data available.");
+            return;
+        }
+
+        String currentID = current.getRoomID();
+        if (currentID == null || !currentID.contains("_"))
+        {
+            System.out.println("Your current location is unknown. Cannot draw map.");
+            return;
+        }
+
+        String floorPrefix = currentID.split("_")[0];  // e.g. "F1", "F2", etc.
+
+        System.out.println("\n------------------ MAP: " + floorPrefix + " ------------------");
+
+        for (Room room : allRooms.values())
+        {
+            if (!room.getRoomID().startsWith(floorPrefix)) continue;
+
+            String marker;
+            if (room == current)
+            {
+                marker = "[YOU]";
+            }
+            else
+            {
+                marker = "[Unseen]";
+            }
+
+            System.out.printf("%-10s %-6s - %s%n",
+                    marker,
+                    room.getRoomID(),
+                    room.getRoomName());
+        }
+
+        System.out.println("------------------------------------------------------\n");
     }
 
 
