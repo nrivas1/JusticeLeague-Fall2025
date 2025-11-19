@@ -12,8 +12,21 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
 
+/**
+ * The MonsterLoader class is responsible for loading monster data from a text file
+ * and creating Monster objects. It also handles assigning monsters to their starting rooms.
+ *
+ * @author Justice League Team
+ * @version Fall 2025
+ */
 public class MonsterLoader
 {
+    /**
+     * Loads monsters from a text file and creates a map of monster ID to Monster objects.
+     *
+     * @param fileName The path to the monster data file
+     * @return A map containing all loaded monsters
+     */
     public static Map<String, Monster> loadMonsters(String fileName)
     {
         Map<String, Monster> monsterMap = new HashMap<>();

@@ -423,6 +423,53 @@ public class GameController {
         vw.println("You don't see a '" + itemName + "' here.");
     }
 
+    private void doAttack() {
+        Room current = st.getCurrentRoom();
+        if (current == null) {
+            vw.println("You are not in a room.");
+            return;
+        }
+
+        Monster monster = current.getMonster();
+        if (monster == null) {
+            vw.println("There is no monster here to attack.");
+            return;
+        }
+
+        Player player = st.getPlayer();
+        if (player == null) {
+            vw.println("Player not found. Cannot attack.");
+            return;
+        }
+
+        // Get equipped artifact (if any)
+        Artifact equippedArtifact = player.getEquippedArtifact();
+
+        // Engage in combat
+        boolean playerWon = Combat.engageFight(player, monster, equippedArtifact);
+
+        if (playerWon) {
+            // Remove monster from room after defeating it
+            current.setMonster(null);
+            vw.println("You have defeated the " + monster.getMonsterName() + "!");
+
+            // Handle item drop
+            String itemDrop = monster.getItemDrop();
+            if (itemDrop != null && !itemDrop.equalsIgnoreCase("Nothing")) {
+                Artifact droppedArtifact = new Artifact(equippedArtifact.getArtifactID(),equippedArtifact.getArtifactName() ,equippedArtifact.getArtifactDescription(), equippedArtifact.getStun(), equippedArtifact.getCategory());
+                current.addArtifact(droppedArtifact);
+                vw.println(itemDrop + " has been added to the room.");
+            }
+        } else {
+            // Check if player is still alive
+            if (player.getHealth() <= 0) {
+                vw.println("You have been defeated! Game Over.");
+                gRunning = false;
+            }
+        }
+    }
+
+
     public void handleDrop(String itemName)
     {
         Player player = st.getPlayer();
@@ -444,6 +491,37 @@ public class GameController {
         var cmdList = commands.listAll();
         vw.printHelp(cmdList);
     }
+
+private void doRun() {
+    Room current = st.getCurrentRoom();
+    if (current == null) {
+        vw.println("You are not in a room.");
+        return;
+    }
+
+    Monster monster = current.getMonster();
+    if (monster == null) {
+        vw.println("There is no monster here to run from.");
+        return;
+    }
+
+    Player player = st.getPlayer();
+    if (player == null) {
+        vw.println("Player not found. Cannot run.");return;
+    }
+
+    // Attempt to run away
+    Combat.runAway(player, monster);
+
+    // Check if player is still alive after running
+    if (player.getHealth() <= 0) {
+        vw.println("You have been defeated while trying to escape! Game Over.");
+        gRunning = false;
+    } else {
+        vw.println("You managed to escape from the " + monster.getMonsterName() + "!");
+    }
+}
+
 
     private void displayExits() {
         Room rm = st.getCurrentRoom();
