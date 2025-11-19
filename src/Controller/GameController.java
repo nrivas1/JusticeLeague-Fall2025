@@ -5,11 +5,11 @@ import View.*;
 import Utils.*;
 
 public class GameController {
-    private final Scanner in;
-    private final GameState st;
-    private final Commands commands;
-    private final View vw;
-    private boolean gRunning = false;
+    private final Scanner in;              // Player input source
+    private final GameState st;            // Holds all game data
+    private final Commands commands;       // Command descriptions
+    private final View vw;                 // UI/printing handler
+    private boolean gRunning = false;      // Tracks if the game is active
 
     public GameController (Scanner in, GameState st, Commands commands, View vw) {
         this.in = in;
@@ -18,6 +18,7 @@ public class GameController {
         this.vw = vw;
     }
 
+    // Starts the game loop and intro text
     public void start() {
         gRunning = true;
         if (!st.isIntroShown()) {
@@ -28,59 +29,47 @@ public class GameController {
             vw.println("Welcome back to Remember Me: The Last Semester!");
             runLoop();
         }
-
-
     }
 
+    // Main command loop: waits for input and processes it
     private void runLoop() {
         while (gRunning) {
             vw.prompt();
             String abr = in.nextLine();
-            if (abr == null) {
-                break;
-            }
+            if (abr == null) break;
             handleInput(abr.trim());
-            roamMonsters();
+            roamMonsters();  // Move monsters after each command
         }
     }
 
-    private void roamMonsters()
-    {
-        for (Monster m : st.getMonsters().values())
-        {
-            if (m.isStunned())
-            {
+    // Moves all monsters one room at a time based on their allowed floor exits
+    private void roamMonsters() {
+        for (Monster m : st.getMonsters().values()) {
+
+            if (m.isStunned()) {   // Skip stunned monsters
                 m.decreaseStunned();
                 continue;
             }
 
             Room currentRoom = st.getRooms().get(m.getCurrentRoomID());
-            if (currentRoom == null)
-            {
-                continue;
-            }
+            if (currentRoom == null) continue;
 
-            String homeFloor = m.getCurrentRoomID().split("_")[0];
+            String homeFloor = m.getCurrentRoomID().split("_")[0]; // Restrict monsters by floor
+
             List<String> exitRoomIDs = new ArrayList<>();
-            for (String roomID : currentRoom.getExits().values())
-            {
-                if (roomID.startsWith(homeFloor))
-                {
+            for (String roomID : currentRoom.getExits().values()) {
+                if (roomID.startsWith(homeFloor))   // Only roam within same floor
                     exitRoomIDs.add(roomID);
-                }
             }
 
-            if (exitRoomIDs.isEmpty())
-            {
-                continue;
-            }
+            if (exitRoomIDs.isEmpty()) continue;
 
+            // Pick a random exit and move the monster
             String nextRoomID = exitRoomIDs.get(new Random().nextInt(exitRoomIDs.size()));
+            if (nextRoomID.isEmpty()) continue;
+
             Room nextRoom = st.getRooms().get(nextRoomID);
-            if (nextRoomID.isEmpty())
-            {
-                continue;
-            }
+            if (nextRoom == null) continue;
 
             currentRoom.removeMonster(m);
             nextRoom.addMonster(m);
@@ -88,82 +77,87 @@ public class GameController {
         }
     }
 
-    public void applyStun(Monster monster, Artifact artifact)
-    {
+    // Applies stun effect to a monster
+    public void applyStun(Monster monster, Artifact artifact) {
         int stunLength = artifact.getStun();
         monster.setStunned(true);
         monster.setStunRemaining(stunLength);
 
-        String statement = monster.getStunStatement().replace("item name", artifact.getArtifactName())
+        String statement = monster.getStunStatement()
+                .replace("item name", artifact.getArtifactName())
                 .replace("item stun length", String.valueOf(stunLength));
 
         vw.println(statement);
     }
 
+    // Reads a player's input and routes to the appropriate command handler
     private void handleInput(String abr) {
-        if (abr.isEmpty()) {
-            return;
-        }
+        if (abr.isEmpty()) return;
+
         String lowerCase = abr.toLowerCase(Locale.ROOT);
 
+        // Exit game
         if (lowerCase.equals("quit") || lowerCase.equals("exit")) {
             gRunning = false;
             vw.println("You have exited 'Remember Me: The Last Semester'. We hope to see you roaming our haunted hallways soon.");
             return;
         }
 
+        // Commands/help menu
         if (lowerCase.equals("commands") || lowerCase.equals("help")) {
             displayHelp();
             return;
         }
 
+        // Exit list
         if (lowerCase.equals("exits")) {
             displayExits();
             return;
         }
 
+        // Movement
         if (lowerCase.startsWith("go ")) {
-            String target = abr.substring(3).trim();
-            handleMovement(target);
+            handleMovement(abr.substring(3).trim());
             return;
         }
 
-        if (lowerCase.startsWith("pickup "))
-        {
-            String itemName = abr.substring(7).trim();
-            handlePickup(itemName);
+        // Picking up items
+        if (lowerCase.startsWith("pickup ")) {
+            handlePickup(abr.substring(7).trim());
             return;
         }
 
-        if (lowerCase.startsWith("drop "))
-        {
-            String itemName = abr.substring(5).trim();
-            handleDrop(itemName);
+        // Dropping items
+        if (lowerCase.startsWith("drop ")) {
+            handleDrop(abr.substring(5).trim());
             return;
         }
 
-        if (lowerCase.equalsIgnoreCase("explore"))
-        {
+        // Searching a room
+        if (lowerCase.equals("explore")) {
             handleExplore();
             return;
         }
 
+        // Map display
         if (lowerCase.equals("map")) {
             handleMap();
             return;
         }
 
+        // Notes inventory
         if (lowerCase.equals("note inventory")) {
             st.getPlayer().viewNoteInventory();
             return;
         }
 
+        // Read a note
         if (lowerCase.startsWith("read ")) {
-            String noteName = abr.substring(5).trim();
-            st.getPlayer().readNote(noteName);
+            st.getPlayer().readNote(abr.substring(5).trim());
             return;
         }
 
+        // Puzzle interaction
         if (lowerCase.equals("solve puzzle")) {
             handleSolvePuzzle();
             return;
@@ -174,61 +168,56 @@ public class GameController {
             return;
         }
 
-        if (lowerCase.equalsIgnoreCase("inventory"))
-        {
+        // Item inventory
+        if (lowerCase.equals("inventory")) {
             st.getPlayer().viewItemInventory(vw);
             return;
         }
 
-        if (lowerCase.startsWith("equip "))
-        {
-            String itemName = abr.substring(6).trim();
-            st.getPlayer().equip(itemName);
+        // Equip item
+        if (lowerCase.startsWith("equip ")) {
+            st.getPlayer().equip(abr.substring(6).trim());
             return;
         }
 
-        if (lowerCase.equalsIgnoreCase("unequip ")) {
-            String itemName = abr.substring(8).trim();
-            st.getPlayer().unequip(itemName);
+        // Unequip item
+        if (lowerCase.startsWith("unequip ")) {
+            st.getPlayer().unequip(abr.substring(8).trim());
             return;
         }
 
-        if (lowerCase.equals("save"))
-        {
+        // Save game
+        if (lowerCase.equals("save")) {
             List<String> saves = SaveManager.listSaves();
             vw.println("Current saves: ");
             for (String s : saves) vw.println(s.replace(".sav", ""));
             vw.println("Type a new Save name: ");
-            String name = in.nextLine().trim();
-            SaveManager.saveGame(st, name);
+            SaveManager.saveGame(st, in.nextLine().trim());
             return;
         }
 
-        if (lowerCase.equals("load"))
-        {
+        // Load game
+        if (lowerCase.equals("load")) {
             List<String> saves = SaveManager.listSaves();
-            if (saves.isEmpty())
-            {
+            if (saves.isEmpty()) {
                 vw.println("No saves found.");
                 return;
             }
             vw.println("Current saves: ");
             for (String s : saves) vw.println(s.replace(".sav", ""));
             vw.println("Enter save name to load: ");
-            String name = in.nextLine().trim();
-            GameState loaded = SaveManager.loadGame(name);
-            if (loaded != null)
-            {
+            GameState loaded = SaveManager.loadGame(in.nextLine().trim());
+            if (loaded != null) {
                 st.copyFrom(loaded);
                 vw.printRoom(st.getCurrentRoom());
             }
             return;
         }
 
-
         vw.println("Unknown/Wrong command. Type 'Commands' to view a list of viable commands.");
     }
 
+    // Handles puzzle-solving logic and reward distribution
     public void handleSolvePuzzle() {
         Room current = st.getCurrentRoom();
         if (current == null) {
@@ -252,7 +241,7 @@ public class GameController {
             return;
         }
 
-        // Show puzzle and attempts
+        // Display puzzle text
         vw.println("\n🧩 Puzzle: " + puzzle.getPuzzleName());
         vw.println(puzzle.getPuzzQuery());
         vw.println("Attempts left: " + puzzle.getAttempts());
@@ -260,7 +249,7 @@ public class GameController {
 
         String answer = in.nextLine().trim().toLowerCase();
 
-        // Check if answer matches ANY solution
+        // Check answer against list of valid solutions
         boolean correct = puzzle.getSolution().stream()
                 .anyMatch(sol -> sol.equalsIgnoreCase(answer));
 
@@ -268,7 +257,7 @@ public class GameController {
             vw.println("\n🎉 Correct! Puzzle solved!");
             puzzle.markSolved();
 
-            // GIVE ITEM REWARD
+            // Give reward item
             String rewardID = puzzle.getRewardItemID();
             Artifact reward = st.getItemMap().get(rewardID);
 
@@ -290,6 +279,7 @@ public class GameController {
         }
     }
 
+    // Player ignores puzzle
     public void handleIgnorePuzzle() {
         Room current = st.getCurrentRoom();
         if (current == null) {
@@ -311,140 +301,121 @@ public class GameController {
         vw.println("You ignore the puzzle for now.");
     }
 
-    public void handleMap()
-    {
+    // Displays ASCII map around the player's current room
+    public void handleMap() {
         Room current = st.getCurrentRoom();
-        if (current == null)
-        {
+        if (current == null) {
             vw.println("You seem to be lost in the void. No map available.");
             return;
         }
-
         vw.printMap(current, st.getRooms());
     }
 
-    public void handleExplore()
-    {
+    // Explores the room and lists items + notes present
+    public void handleExplore() {
         Room current = st.getCurrentRoom();
-        if (current == null)
-        {
+        if (current == null) {
             vw.println("You're nowhere, that's a problem.");
             return;
         }
-
 
         List<Artifact> items = new ArrayList<>();
         List<Notes> notes = new ArrayList<>();
 
-        //checks for items in room
-        for (Artifact item : st.getItemMap().values())
-        {
+        // Find items in this room
+        for (Artifact item : st.getItemMap().values()) {
             if (item.getLocationID() != null &&
-                    item.getLocationID().trim().equalsIgnoreCase(current.getRoomID().trim())) {
+                    item.getLocationID().equalsIgnoreCase(current.getRoomID())) {
                 items.add(item);
             }
         }
 
-        //checks for notes in room
-        for (Notes note : st.getNotesMap().values())
-        {
+        // Find notes in this room
+        for (Notes note : st.getNotesMap().values()) {
             if (note.getLocationID() != null &&
-                    note.getLocationID().trim().equalsIgnoreCase(current.getRoomID().trim())) {
+                    note.getLocationID().equalsIgnoreCase(current.getRoomID())) {
                 notes.add(note);
             }
         }
 
-        if (items.isEmpty() && notes.isEmpty())
-        {
+        if (items.isEmpty() && notes.isEmpty()) {
             vw.println("You look around but found nothing of interest.");
-        }
-        else
-        {
+        } else {
             vw.println("You look around and found: ");
             for (Artifact item : items)
-            {
                 vw.println("• " + item.getArtifactName() + ": " + item.getArtifactDescription());
-            }
 
             for (Notes note : notes)
-            {
                 vw.println("• " + note.getNoteName());
-            }
-
         }
     }
 
-
-
-    public void handlePickup(String itemName)
-    {
+    // Handles picking up notes or items by name
+    public void handlePickup(String itemName) {
         Room current = st.getCurrentRoom();
-        if  (current == null)
-        {
+        if (current == null) {
             vw.println("You're nowhere, that's a problem.");
             return;
         }
 
-        //finding item
+        // Try to find an item first
         Artifact found = null;
-        for (Artifact item : st.getItemMap().values())
-        {
-            if (item.getLocationID() != null && item.getLocationID().equals(current.getRoomID()) &&
-                    item.getArtifactName().equalsIgnoreCase(itemName))
-            {
+        for (Artifact item : st.getItemMap().values()) {
+            if (item.getLocationID() != null &&
+                    item.getLocationID().equals(current.getRoomID()) &&
+                    item.getArtifactName().equalsIgnoreCase(itemName)) {
                 found = item;
                 break;
             }
         }
 
-        if (found != null)
-        {
+        if (found != null) {
             st.getPlayer().pickUp(found);
-            found.setLocationID(null);
+            found.setLocationID(null);  // Remove from world
             return;
         }
 
-        //Finding note
+        // Try to find a note
         Notes foundNote = null;
-        for (Notes note : st.getNotesMap().values())
-        {
-            if (note.getLocationID() != null && note.getNoteName().equalsIgnoreCase(itemName))
-            {
+        for (Notes note : st.getNotesMap().values()) {
+            if (note.getLocationID() != null &&
+                    note.getNoteName().equalsIgnoreCase(itemName)) {
                 foundNote = note;
                 break;
             }
         }
 
-        if (foundNote != null)
-        {
+        if (foundNote != null) {
             st.getPlayer().pickUp(foundNote);
             return;
         }
+
         vw.println("You don't see a '" + itemName + "' here.");
     }
 
-    public void handleDrop(String itemName)
-    {
+    // Drop an item by name
+    public void handleDrop(String itemName) {
         Player player = st.getPlayer();
         Room current = st.getCurrentRoom();
 
-        for (Artifact item : player.getInventory())
-        {
-            if (item.getArtifactName().equalsIgnoreCase(itemName))
-            {
+        for (Artifact item : player.getInventory()) {
+            if (item.getArtifactName().equalsIgnoreCase(itemName)) {
                 player.drop(item, current);
                 vw.println("You dropped " + item.getArtifactName());
                 return;
             }
         }
+
         System.out.println("You don't have " + itemName + ".");
     }
 
+    // Prints available commands
     private void displayHelp() {
         var cmdList = commands.listAll();
         vw.printHelp(cmdList);
     }
 
+    // Prints exits from the current room
     private void displayExits() {
         Room rm = st.getCurrentRoom();
         if (rm == null) {
@@ -454,34 +425,35 @@ public class GameController {
         vw.printExits(rm);
     }
 
+    // Handles movement between rooms via exit name or direct room ID
     public void handleMovement(String input) {
         Room current = st.getCurrentRoom();
-        if (current == null)
-        {
+        if (current == null) {
             vw.println("You're nowhere, that's a problem.");
             return;
         }
 
-        Map<String, String> exits = current.getExits(); // exitName → roomID
+        Map<String, String> exits = current.getExits();
 
-        // Try exit name first
+        // First, try exit name (e.g. "Exit 1")
         String targetRoomID = exits.get(input);
 
-        // If not found, treat input as a direct room ID
-        if (targetRoomID == null && st.getRooms().containsKey(input)) {
+        // Then, try room ID directly (e.g. "F1_3")
+        if (targetRoomID == null && st.getRooms().containsKey(input))
             targetRoomID = input;
-        }
 
         Room nextRoom = st.getRooms().get(targetRoomID);
-        if (nextRoom != null)
-        {
+
+        if (nextRoom != null) {
+            // Move player into room
             st.setCurrentRoom(nextRoom);
             st.getPlayer().setCurrentRoom(nextRoom);
+
             vw.println(nextRoom.getRoomName());
             vw.println(nextRoom.getRoomDescription());
             vw.printExits(nextRoom);
 
-            // Show puzzle info if room contains a puzzle
+            // Show puzzle prompt if present
             Puzzle puzzle = nextRoom.getPuzzle();
             if (puzzle != null && !puzzle.isSolved()) {
                 vw.println("\n🧩 Puzzle: " + puzzle.getPuzzleName());
@@ -489,10 +461,10 @@ public class GameController {
                 vw.println("Type 'ignore puzzle' to skip.\n");
             }
 
+            // Floor change detection for monster awareness system
             String playerRoomID = nextRoom.getRoomID();
             String playerFloor = playerRoomID.split("_")[0];
 
-// Optional: reset monster memory if player changed floors
             String previousFloor = current.getRoomID().split("_")[0];
             if (!previousFloor.equals(playerFloor)) {
                 for (Monster monster : st.getMonsters().values()) {
@@ -500,6 +472,7 @@ public class GameController {
                 }
             }
 
+            // Detect monsters the player meets on this floor
             for (Monster monster : st.getMonsters().values()) {
                 String monsterRoomID = monster.getCurrentRoomID();
                 if (monsterRoomID == null) continue;
@@ -511,15 +484,13 @@ public class GameController {
                 boolean seen = lastSeenFloor != null && lastSeenFloor.equals(playerFloor);
 
                 if (isSameFloor && !seen) {
-                    vw.println(monster.getEnterStatement()); // or getExitStatement() if preferred
+                    vw.println(monster.getEnterStatement());
                     monster.setLastSeenFloor(playerFloor);
                 }
             }
-        }
-        else
-        {
+
+        } else {
             vw.println("You can't go '" + input + "' from here.");
         }
     }
-
 }
