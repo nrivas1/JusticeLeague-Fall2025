@@ -1,8 +1,9 @@
 package Model;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class Puzzle
+public class Puzzle implements Serializable
 {
     private String puzzleID;
     private String puzzleName;
@@ -11,8 +12,7 @@ public class Puzzle
     private int attempts;
     private String rewardItemName;
     private String rewardItemID;
-    private boolean solved;
-
+    private boolean solved = false;
 
     public Puzzle(String puzzleID, String puzzleName, String puzzQuery, List<String> solution, int attempts, String rewardItemName, String rewardItemID)
     {
@@ -23,7 +23,6 @@ public class Puzzle
         this.attempts = attempts;
         this.rewardItemName = rewardItemName;
         this.rewardItemID = rewardItemID;
-
     }
 
     public String getPuzzleID()
@@ -31,19 +30,9 @@ public class Puzzle
         return puzzleID;
     }
 
-    public boolean isSolved()
+    public String getPuzzleName()
     {
-        return solved;
-    }
-
-    public int getAttempts()
-    {
-        return attempts;
-    }
-
-    public List<String> getSolution()
-    {
-        return solution;
+        return puzzleName;
     }
 
     public String getPuzzQuery()
@@ -51,8 +40,39 @@ public class Puzzle
         return puzzQuery;
     }
 
-    public String getPuzzleName()
+    public boolean isSolved()
     {
-        return puzzleName;
+        return solved;
+    }
+
+    public void markSolved()
+    {
+        this.solved = true;
+    }
+
+    public int getAttempts()
+    {
+        return attempts;
+    }
+
+    public void reduceAttempts()
+    {
+        attempts--;
+        if (attempts < 0) attempts = 0;
+    }
+
+    public List<String> getSolution()
+    {
+        return solution;
+    }
+
+    public String getRewardItemID()
+    {
+        return rewardItemID;
+    }
+
+    public String getRewardItemName()
+    {
+        return rewardItemName;
     }
 }

@@ -1,0 +1,10 @@
+F1_8:Band-Aid
+F1_6:Pencil
+F2_1:HDMI Cable
+F2_4:Flashlight
+F3_1:Paintbrush
+F3_3:Calculator
+F3_7:32 oz Water Bottle
+F4_3:Scissors
+F4_4:Stapler
+F4_9:Baseball Bat

@@ -1,8 +1,11 @@
 package Model;
 
+import View.View;
+
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Player
+public class Player implements Serializable
 {
     private int playerID;
     private String playerName;
@@ -23,7 +26,7 @@ public class Player
         this.lives = lives;
         this.health = health;
         this.canStun = false;
-        this.inventory = new ArrayList<>();
+        this.inventory = new ArrayList<>(10);
     }
 
     public int getPlayerID()
@@ -66,7 +69,7 @@ public class Player
     {
         for (Artifact artifact : inventory)
         {
-            if (artifact.getArtifactName().equals(itemName) && artifact.canStun())
+            if (artifact.getArtifactName().equalsIgnoreCase(itemName))
             {
                 if (equippedArtifact != null)
                 {
@@ -96,7 +99,13 @@ public class Player
         System.out.println("Picked up: " + artifact.getArtifactName());
     }
 
-    public void drop(Artifact artifact)
+    public void pickUp(Notes Note)
+    {
+        noteInventory.add(Note);
+        System.out.println("Collected " + Note.getNoteName());
+    }
+
+    public void drop(Artifact artifact, Room currentRoom)
     {
         if (!inventory.contains(artifact))
         {
@@ -105,6 +114,8 @@ public class Player
         }
 
         inventory.remove(artifact);
+        currentRoom.addArtifact(artifact);
+        artifact.setLocationID(currentRoom.getRoomID());
         System.out.println("Dropped: " + artifact.getArtifactName());
     }
 
@@ -114,20 +125,20 @@ public class Player
         System.out.println("Lives: " + lives + "/3");
     }
 
-    public void viewItemInventory()
+    public void viewItemInventory(View vw)
     {
-        System.out.println("Inventory: ");
-        if (inventory.isEmpty())
+        if (inventory == null || inventory.isEmpty())
         {
             System.out.println("I haven't collected any items yet.");
+            return;
         }
-        else
-        {
+
+        System.out.println("Inventory: ");
             for (Artifact artifact : inventory)
             {
-                System.out.println(artifact.getArtifactName());
+                System.out.println("• " + artifact.getArtifactName() + ": " + artifact.getArtifactDescription());
             }
-        }
+
     }
 
     public void viewNoteInventory()
@@ -152,7 +163,9 @@ public class Player
         {
             if (note.getNoteName().equalsIgnoreCase(noteName))
             {
-                System.out.println(note.getNoteName() + ":\n" + note.getNoteDescription());
+                System.out.println("\n--- " + note.getNoteName() + " ---");
+                System.out.println(note.getNoteDescription());
+                System.out.println("------------------------------\n");
                 return;
             }
         }
@@ -172,7 +185,7 @@ public class Player
 
         for (Artifact artifact : inventory)
         {
-            if (artifact.getArtifactName().equalsIgnoreCase("Bandage"))
+            if (artifact.getArtifactName().equalsIgnoreCase("Band-Aid"))
             {
                 hasBandage = true;
                 break;
@@ -181,17 +194,17 @@ public class Player
 
         if (!hasBandage)
         {
-            System.out.println("I need to find a bandage to heal.");
+            System.out.println("I need to find a Band-Aid to heal.");
         }
 
-        if (equippedArtifact == null || !equippedArtifact.getArtifactName().equalsIgnoreCase("Bandage"))
+        if (equippedArtifact == null || !equippedArtifact.getArtifactName().equalsIgnoreCase("Band-Aid"))
         {
-            System.out.println("I must equip my bandage to heal.");
+            System.out.println("I must equip my Band-Aid to heal.");
             return;
         }
 
         health = Math.min(health + healAmount, maxHealth);
-        System.out.println("I used the bandage to heal myself. My current health: " + health);
+        System.out.println("I used the Band-Aid to heal myself. My current health: " + health);
 
 // Will implement this later.
 //        if (monster != null)
@@ -227,5 +240,20 @@ public class Player
             System.out.println("Game over.");
             System.exit(0);
         }
+    }
+
+    public void setCurrentRoom(Room currentRoom)
+    {
+        this.currentRoom = currentRoom;
+    }
+
+    public void setStartingRoom(Room startingRoom)
+    {
+        this.startingRoom = startingRoom;
+    }
+
+    public Room getCurrentRoom()
+    {
+        return currentRoom;
     }
 }

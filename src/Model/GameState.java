@@ -1,354 +1,177 @@
 package Model;
 
+import java.sql.Array;
 import java.util.*;
 import java.io.*;
 import View.*;
 import Controller.*;
 import java.time.Instant;
 
-public class GameState {
+public class GameState implements Serializable {
 
-    private Map<String, Room> roomInd = new LinkedHashMap<>();
+    private Player player;
+    private Map<String, Room> rooms = new LinkedHashMap<>();
+    private Map<String, Monster>  monsters = new LinkedHashMap<>();
+    private Map<String, Puzzle>  puzzles = new LinkedHashMap<>();
+    private Map<String, Artifact> artifacts = new LinkedHashMap<>();
+    private Map<String, Notes> notes = new LinkedHashMap<>();
     private Room currentRoom;
-    private final Set<String> visitedRooms = new HashSet<>();
-    private Player currentPlayer;
-    private final Map<String, Boolean> puzzleSolved = new HashMap<>();
-    private final Map<String, Boolean> monstearBeaten = new HashMap<>();
-    private final Set<String> colNotes = new HashSet<>();
-    private boolean showIntro = false;
-    private long turns = 0;
-    private boolean ddd = false;
-    private String saves;
-    private Instant lastSaved;
-    private final Random rand = new Random();
-    private final Map<String, Monster> monsterMap = new LinkedHashMap<>();
+    public boolean introShown = false;
 
-    // These two were already declared by you (likely your own classes)
-    private Puzzle puzzle;
-    private Combat cbt;
-
-    // These are needed for the methods you pasted below
-    private PuzzleAttempt activePuzzle;
-    private CombatState combat;
-
-    public GameState() {
-        // empty constructor
-    }
-
-    // =====================================================================
-    // New Game
-    // =====================================================================
-
-    public void startNewGame(String startRoomID) {
-        if (startRoomID != null && roomInd.containsKey(startRoomID)) {
-            setCurrentRoom(roomInd.get(startRoomID));
-        } else if (!roomInd.isEmpty()) {
-            setCurrentRoom(roomInd.values().iterator().next());
+    public void saveToFile(String fileName)
+    {
+        try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(fileName)))
+        {
+            out.writeObject(this);
+            System.out.println("Game successfully saved: " + fileName);
         }
-
-        setShowIntro(false);
-        visitedRooms.clear();
-        puzzleSolved.clear();
-        monstearBeaten.clear();
-        colNotes.clear();
-        puzzle = null;
-        cbt = null;
-        activePuzzle = null;
-        combat = null;
-        turns = 0;
-        ddd = false;
-        saves = null;
-        lastSaved = null;
+        catch (IOException ioe)
+        {
+            System.out.println("Failed to save: "  + ioe.getMessage());
+        }
     }
 
-    // =====================================================================
-    // Rooms / Location
-    // =====================================================================
-
-    public Map<String, Room> getRoomIndex() {
-        return roomInd;
+    public static GameState loadFromFile(String fileName)
+    {
+        try (ObjectInputStream in = new ObjectInputStream(new FileInputStream(fileName)))
+        {
+            return (GameState) in.readObject();
+        }
+        catch (IOException | ClassNotFoundException ioe)
+        {
+            System.out.println("Failed to load: " + fileName);
+            return null;
+        }
     }
 
-    public void setRoomIndex(Map<String, Room> roomInd) {
-        this.roomInd = (roomInd != null) ? new LinkedHashMap<>(roomInd) : new LinkedHashMap<>();
-        markDDD();
+    public void copyFrom(GameState other)
+    {
+        this.player = other.player;
+        this.rooms = new LinkedHashMap<>(other.rooms);
+        this.monsters = new LinkedHashMap<>(other.monsters);
+        this.puzzles = new LinkedHashMap<>(other.puzzles);
+        this.artifacts = new LinkedHashMap<>(other.artifacts);
+        this.currentRoom = other.currentRoom;
+        this.introShown = other.introShown;
+    }
+
+    public Player getPlayer()
+    {
+        return player;
+    }
+
+    public void setPlayer(Player player)
+    {
+        this.player = player;
+    }
+
+    public Map<String, Room> getRooms()
+    {
+        return rooms;
+    }
+
+    public void setRooms (Map<String, Room> rooms)
+    {
+        this.rooms = rooms;
+    }
+
+    public Map<String, Monster> getMonsters()
+    {
+        return monsters;
+    }
+
+    public void setMonsters (Map<String, Monster> monsters)
+    {
+        this.monsters = monsters;
+    }
+
+    public Map<String, Puzzle>  getPuzzles()
+    {
+        return puzzles;
+    }
+
+    public void setPuzzles(Map<String, Puzzle> puzzles)
+    {
+        this.puzzles = puzzles;
+    }
+
+
+    public void setMonsterMap (Map<String, Monster> monsterMap)
+    {
+        this.monsters = (monsterMap != null) ? new LinkedHashMap<>(monsterMap) : new LinkedHashMap<>();
+    }
+
+    public void setItemMap(Map<String, Artifact> itemMap)
+    {
+        this.artifacts = (itemMap != null) ? new LinkedHashMap<>(itemMap) : new LinkedHashMap<>();
+    }
+
+    public Map<String, Artifact> getItemMap ()
+    {
+        return artifacts;
+    }
+
+    public Map<String, Notes> getNotesMap()
+    {
+        return notes;
+    }
+
+    public void setNotesMap(Map<String, Notes> notesMap)
+    {
+        this.notes = notesMap;
+    }
+
+    public Room getRoomByID(String id)
+    {
+        return rooms.get(id);
+    }
+
+    public Monster getMonsterByID(String id)
+    {
+        return monsters.get(id);
+    }
+
+    public Puzzle getPuzzleByID(String id)
+    {
+        return puzzles.get(id);
+    }
+
+    public Artifact getArtifactByID(String id)
+    {
+        return artifacts.get(id);
+    }
+
+    public Collection<Room> getAllRooms()
+    {
+        return rooms.values();
     }
 
     public Room getCurrentRoom() {
+        if (player != null && player.getCurrentRoom() != null) {
+            return player.getCurrentRoom();
+        }
         return currentRoom;
     }
 
-    public void setCurrentRoom(Room currentRoom) {
-        this.currentRoom = currentRoom;
-        if (currentRoom != null) {
-            // assumes Room has getRoomID()
-            visitedRooms.add(currentRoom.getRoomID());
-        }
-        markDDD();
-    }
-
-    public boolean hasVis(String roomID) {
-        return visitedRooms.contains(roomID);
-    }
-
-    public void isVis(String roomID) {
-        if (roomID != null) visitedRooms.add(roomID);
-        markDDD();
-    }
-
-    public Set<String> getVisRooms() {
-        return Collections.unmodifiableSet(visitedRooms);
-    }
-
-    // =====================================================================
-    // Player
-    // =====================================================================
-
-    public Player getPlayer() {
-        return currentPlayer;
-    }
-
-    public void setPlayer(Player player) {
-        this.currentPlayer = player;
-        markDDD();
-    }
-
-    // =====================================================================
-    // Puzzles & Monsters
-    // =====================================================================
-
-    public void markPuzzleSolved(String puzzleID) {
-        if (puzzleID != null) puzzleSolved.put(puzzleID, true);
-        markDDD();
-    }
-
-    public boolean isPuzzleSolved(String puzzleId) {
-        return puzzleSolved.getOrDefault(puzzleId, false);
-    }
-
-    public Map<String, Boolean> getPuzzleFlags() {
-        return Collections.unmodifiableMap(puzzleSolved);
-    }
-
-    public void markMonsterDefeated(String monsterId) {
-        if (monsterId != null) monstearBeaten.put(monsterId, true);
-        markDDD();
-    }
-
-    public boolean isMonsterDefeated(String monsterId) {
-        return monstearBeaten.getOrDefault(monsterId, false);
-    }
-
-    public Map<String, Boolean> getMonsterFlags() {
-        return Collections.unmodifiableMap(monstearBeaten);
-    }
-
-    public boolean addNote(String noteIdOrTitle) {
-        if (noteIdOrTitle == null || noteIdOrTitle.isBlank()) return false;
-        boolean added = colNotes.add(noteIdOrTitle);
-        if (added) markDDD();
-        return added;
-    }
-
-    public boolean hasNote(String noteIdOrTitle) {
-        return colNotes.contains(noteIdOrTitle);
-    }
-
-    public Set<String> getCollectedNotes() {
-        return Collections.unmodifiableSet(colNotes);
-    }
-
-    // =====================================================================
-    // Session / Meta
-    // =====================================================================
-
-    public boolean isIntroShown() {
-        return showIntro;
-    }
-
-    public void setIntroShown(boolean introShown) {
-        this.showIntro = introShown;
-    }
-
-    // alias for the name you used in startNewGame
-    public void setShowIntro(boolean showIntro) {
-        this.showIntro = showIntro;
-    }
-
-    public long getTurnCount() {
-        return turns;
-    }
-
-    public void incrementTurn() {
-        turns++;
-    }
-
-    public boolean isDirty() {
-        return ddd;
-    }
-
-    public void markDirty() {
-        this.ddd = true;
-    }
-
-    public void clearDirty() {
-        this.ddd = false;
-    }
-
-    // internal helper you referenced as markDDD()
-    private void markDDD() {
-        this.ddd = true;
-    }
-
-    public String getSaveSlot() {
-        return saves;
-    }
-
-    public void setSaveSlot(String saveSlot) {
-        this.saves = saveSlot;
-    }
-
-    public Instant getLastSaved() {
-        return lastSaved;
-    }
-
-    /** Call after successful save; also clears dirty flag. */
-    public void touchSaved() {
-        this.lastSaved = Instant.now();
-        this.ddd = false;
-    }
-
-    public Random getRng() {
-        return rand;
-    }
-
-    public void reseedRng(long seed) {
-        rand.setSeed(seed);
-    }
-
-    // =====================================================================
-    // Active Puzzle (ephemeral)
-    // =====================================================================
-
-    public void startPuzzle(String puzzleId, int attemptsAllowed) {
-        if (puzzleId == null || attemptsAllowed < 0) return;
-        activePuzzle = new PuzzleAttempt(puzzleId, attemptsAllowed);
-    }
-
-    public void clearActivePuzzle() {
-        activePuzzle = null;
-    }
-
-    public boolean isPuzzleActive() {
-        return activePuzzle != null;
-    }
-
-    public PuzzleAttempt getActivePuzzle() {
-        return activePuzzle;
-    }
-
-    /** Decrements attempt counter if active; returns remaining attempts, or -1 if no active puzzle. */
-    public int consumePuzzleAttempt() {
-        if (activePuzzle == null) return -1;
-        if (activePuzzle.attemptsRemaining > 0) activePuzzle.attemptsRemaining--;
-        return activePuzzle.attemptsRemaining;
-    }
-
-    // =====================================================================
-    // Combat (ephemeral)
-    // =====================================================================
-
-    public void startCombat(String monsterId, int monsterHp) {
-        combat = new CombatState(monsterId, Math.max(0, monsterHp));
-    }
-
-    public void endCombat() {
-        combat = null;
-    }
-
-    public boolean inCombat() {
-        return combat != null;
-    }
-
-    public CombatState getCombat() {
-        return combat;
-    }
-
-    // =====================================================================
-    // Nested lightweight state holders
-    // =====================================================================
-
-    /**
-     * Tracks an in-progress puzzle the player is currently engaging with.
-     * Keep it minimal; full logic should live in your Puzzle service/logic.
-     */
-    public static final class PuzzleAttempt {
-        private final String puzzleId;
-        private int attemptsRemaining;
-        private String lastHint;
-
-        private PuzzleAttempt(String puzzleId, int attemptsRemaining) {
-            this.puzzleId = puzzleId;
-            this.attemptsRemaining = Math.max(0, attemptsRemaining);
-        }
-
-        public String getPuzzleId() {
-            return puzzleId;
-        }
-
-        public int getAttemptsRemaining() {
-            return attemptsRemaining;
-        }
-
-        public String getLastHint() {
-            return lastHint;
-        }
-
-        public void setLastHint(String lastHint) {
-            this.lastHint = lastHint;
-        }
-    }
-
-    /**
-     * Minimal combat snapshot; expand as needed (enemy status, player buffs, etc.).
-     */
-    public static final class CombatState {
-        private final String monsterId;
-        private int monsterHp;
-        private int playerTempBuff; // e.g., turns of evasion/heal-over-time, etc.
-
-        private CombatState(String monsterId, int monsterHp) {
-            this.monsterId = monsterId;
-            this.monsterHp = monsterHp;
-        }
-
-        public String getMonsterId() {
-            return monsterId;
-        }
-
-        public int getMonsterHp() {
-            return monsterHp;
-        }
-
-        public void setMonsterHp(int monsterHp) {
-            this.monsterHp = Math.max(0, monsterHp);
-        }
-
-        public int getPlayerTempBuff() {
-            return playerTempBuff;
-        }
-
-        public void setPlayerTempBuff(int playerTempBuff) {
-            this.playerTempBuff = playerTempBuff;
-        }
-
-        public boolean isMonsterDefeated() {
-            return monsterHp <= 0;
-        }
-    }
-
-    public Map<String, Monster> getMonsterMap()
+    public void setCurrentRoom(Room currentRoom)
     {
-        return monsterMap;
+        this.currentRoom = currentRoom;
     }
+
+    public boolean isIntroShown()
+    {
+        return introShown;
+    }
+
+    public void  setIntroShown(boolean b)
+    {
+        this.introShown = b;
+    }
+
+    public void setRoomIndex(Map<String, Room> rooms)
+    {
+        this.rooms = (rooms != null) ? new LinkedHashMap<>(rooms) : new LinkedHashMap<>();
+    }
+
+
 }
