@@ -65,6 +65,12 @@ public class View {
             }
         }
 
+        Puzzle p = room.getPuzzle();
+        if (p != null && !p.isSolved()) {
+            System.out.println("Puzzle here: " + p.getPuzzleName());
+            System.out.println("Type 'solve puzzle' to try it or 'ignore puzzle' to skip.");
+        }
+
         Map<String, String> exits = room.getExits();
         if (exits == null || exits.isEmpty())
         {

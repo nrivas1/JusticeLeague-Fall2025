@@ -164,6 +164,16 @@ public class GameController {
             return;
         }
 
+        if (lowerCase.equals("solve puzzle")) {
+            handleSolvePuzzle();
+            return;
+        }
+
+        if (lowerCase.equals("ignore puzzle")) {
+            handleIgnorePuzzle();
+            return;
+        }
+
         if (lowerCase.equalsIgnoreCase("inventory"))
         {
             st.getPlayer().viewItemInventory(vw);
@@ -217,6 +227,88 @@ public class GameController {
 
 
         vw.println("Unknown/Wrong command. Type 'Commands' to view a list of viable commands.");
+    }
+
+    public void handleSolvePuzzle() {
+        Room current = st.getCurrentRoom();
+        if (current == null) {
+            vw.println("You're nowhere. There's nothing to solve.");
+            return;
+        }
+
+        Puzzle puzzle = current.getPuzzle();
+        if (puzzle == null) {
+            vw.println("There is no puzzle to solve here.");
+            return;
+        }
+
+        if (puzzle.isSolved()) {
+            vw.println("You already solved this puzzle.");
+            return;
+        }
+
+        if (puzzle.getAttempts() <= 0) {
+            vw.println("This puzzle is locked. No more attempts.");
+            return;
+        }
+
+        // Show puzzle and attempts
+        vw.println("\n🧩 Puzzle: " + puzzle.getPuzzleName());
+        vw.println(puzzle.getPuzzQuery());
+        vw.println("Attempts left: " + puzzle.getAttempts());
+        vw.println("> ");
+
+        String answer = in.nextLine().trim().toLowerCase();
+
+        // Check if answer matches ANY solution
+        boolean correct = puzzle.getSolution().stream()
+                .anyMatch(sol -> sol.equalsIgnoreCase(answer));
+
+        if (correct) {
+            vw.println("\n🎉 Correct! Puzzle solved!");
+            puzzle.markSolved();
+
+            // GIVE ITEM REWARD
+            String rewardID = puzzle.getRewardItemID();
+            Artifact reward = st.getItemMap().get(rewardID);
+
+            if (reward != null) {
+                st.getPlayer().pickUp(reward);
+                reward.setLocationID(null); // Remove from world
+                vw.println("You obtained: " + reward.getArtifactName());
+            }
+            return;
+        }
+
+        // Wrong answer
+        puzzle.reduceAttempts();
+        vw.println("\n❌ Incorrect answer.");
+        vw.println("Attempts left: " + puzzle.getAttempts());
+
+        if (puzzle.getAttempts() == 0) {
+            vw.println("The puzzle locks permanently.");
+        }
+    }
+
+    public void handleIgnorePuzzle() {
+        Room current = st.getCurrentRoom();
+        if (current == null) {
+            vw.println("You are nowhere. There's nothing to ignore.");
+            return;
+        }
+
+        Puzzle puzzle = current.getPuzzle();
+        if (puzzle == null) {
+            vw.println("There is no puzzle to ignore.");
+            return;
+        }
+
+        if (puzzle.isSolved()) {
+            vw.println("Puzzle already solved.");
+            return;
+        }
+
+        vw.println("You ignore the puzzle for now.");
     }
 
     public void handleMap()
@@ -388,6 +480,14 @@ public class GameController {
             vw.println(nextRoom.getRoomName());
             vw.println(nextRoom.getRoomDescription());
             vw.printExits(nextRoom);
+
+            // Show puzzle info if room contains a puzzle
+            Puzzle puzzle = nextRoom.getPuzzle();
+            if (puzzle != null && !puzzle.isSolved()) {
+                vw.println("\n🧩 Puzzle: " + puzzle.getPuzzleName());
+                vw.println("Type 'solve puzzle' to try it.");
+                vw.println("Type 'ignore puzzle' to skip.\n");
+            }
 
             String playerRoomID = nextRoom.getRoomID();
             String playerFloor = playerRoomID.split("_")[0];
