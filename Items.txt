@@ -1,4 +1,7 @@
 src\Items.txt
+I_1 | Baseball Bat | can be used in combat with monsters | Weapon | 3 | --
+I_2 | Calculator | can be used in combat with Monsters | Weapon | 1 | --
+I_3 | Flashlight | can be used in combat with monsters | Weapon | 2 | --
 I_4 | Pencil | A sharpened wooden pencil with a worn eraser, useful for sketching quick maps and strategies. Can be used in combat against monster. Will stun monster for 1 action. | Weapon | 1 | --
 I_5 | Stapler | A small metal stapler with a few bent staples stuck inside. Can be used in combat against monster. Will stun monster for 1 action. | Weapon | 1 | --
 I_6 | Scissors | A pair of metal scissors with slightly rusted blades, sharp enough to cut through fabric and flesh, with some precision. Can be used against monster in combat. Will stun monster for 1 action. | Weapon | 1 | --

@@ -1,13 +1,12 @@
 package Loader;
 
 import Model.Artifact;
+import Model.Room;
 
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Scanner;
 
 public class ArtifactLoader
 {
@@ -39,16 +38,50 @@ public class ArtifactLoader
                 int stun = stunString.equals("--") ? 0 : Integer.parseInt(stunString);
                 String attachedPuzzle =  puzzle.equals("--") ? null : puzzle;
 
-                if (category.equalsIgnoreCase("Note"))
-                {
+
                     Artifact artifact = new Artifact(id, name, description, stun, attachedPuzzle);
                     artifactMap.put(id, artifact);
-                }
+
             }
         } catch (IOException e)
         {
             throw new RuntimeException(e);
         }
         return artifactMap;
+    }
+
+    public static void assignItems(String fileName, Map<String, Artifact> itemMap, Map<String, Room> roomMap)
+    {
+        try (Scanner sc = new Scanner(new File(fileName)))
+        {
+            while (sc.hasNextLine())
+            {
+                String line = sc.nextLine().trim();
+                if (line.isEmpty() || !line.contains(":")) continue;
+                String[] parts = line.split(":", 2);
+                String roomID = parts[0].trim();
+                String itemName = parts[1].trim();
+
+                Room room = roomMap.get(roomID);
+                Artifact item = itemMap.values().stream()
+                        .filter(i -> i.getArtifactName().equalsIgnoreCase(itemName))
+                        .findFirst()
+                        .orElse(null);
+
+                if (room != null && item != null)
+                {
+                    item.setLocationID(room.getRoomID());
+                }
+                else
+                {
+                    System.out.println("Could not assign " + itemName + " to " + roomID + ".");
+                }
+
+            }
+        }
+        catch (FileNotFoundException e)
+        {
+            System.out.println(fileName + " not found.");
+        }
     }
 }
