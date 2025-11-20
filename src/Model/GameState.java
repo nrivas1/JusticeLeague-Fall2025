@@ -20,7 +20,7 @@ public class GameState implements Serializable {
 
     public void saveToFile(String fileName)
     {
-        //Opens file for writing, then wraps it to allow writing objects.
+        //Opens file for writing, then wraps it to allow writing object
         try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(fileName)))
         {
             //Serializes the current Game State object.

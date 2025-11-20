@@ -47,6 +47,7 @@ public class Main {
             System.out.println("Enter save file: ");
             String saveFile = sc.nextLine().trim();
             GameState gs = SaveManager.loadGame(saveFile);
+            //Game now saves.
             if (gs != null)
             {
                 View vw = new View();
