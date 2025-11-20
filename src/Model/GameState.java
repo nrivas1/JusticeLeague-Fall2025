@@ -20,8 +20,10 @@ public class GameState implements Serializable {
 
     public void saveToFile(String fileName)
     {
+        //Opens file for writing, then wraps it to allow writing objects.
         try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(fileName)))
         {
+            //Serializes the current Game State object.
             out.writeObject(this);
             System.out.println("Game successfully saved: " + fileName);
         }
@@ -44,6 +46,7 @@ public class GameState implements Serializable {
         }
     }
 
+    //Takes another GameState object and copies the content into "this" one.
     public void copyFrom(GameState other)
     {
         this.player = other.player;
