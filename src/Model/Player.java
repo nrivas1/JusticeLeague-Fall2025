@@ -232,7 +232,7 @@ public class Player implements Serializable
         {
             health = 100;
             currentRoom = startingRoom;
-            System.out.println("You awakened in the Front yard of the school.");
+            System.out.println("You awakened in the Front yard of the schoo.");
         }
         else
         {

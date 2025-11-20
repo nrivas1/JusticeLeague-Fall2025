@@ -47,7 +47,7 @@ public class Main {
             System.out.println("Enter save file: ");
             String saveFile = sc.nextLine().trim();
             GameState gs = SaveManager.loadGame(saveFile);
-            if (gs != null)
+            if (gs == null)
             {
                 View vw = new View();
                 Commands command = new Commands("Commands.txt");

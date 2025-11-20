@@ -11,23 +11,36 @@ public class SaveManager {
     private static final String SAVE_DIR = "saves";
 
     public static List<String> listSaves() {
-        //Creates a file object pointing to the directory where the save files are stored.
         File dir = new File(SAVE_DIR);
-        //checks if directory is created, if not it creates it
         if (!dir.exists()) dir.mkdirs();
-        //Lists all save files that ends with ".sav"
         String[] files = dir.list((d, name) -> name.endsWith(".sav"));
         return files == null ? new ArrayList<>() : Arrays.asList(files);
     }
 
     public static void saveGame(GameState state, String name)
     {
-        state.saveToFile(name + ".sav");
+        try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(SAVE_DIR + "/" + name + ".sav")))
+        {
+            out.writeObject(state);
+            System.out.println("Game saved as " + name);
+
+        }
+        catch (IOException e)
+        {
+            System.out.println("Error saving game " + e.getMessage() );
+        }
     }
 
     public static GameState loadGame(String name)
     {
-        return GameState.loadFromFile(name + ".sav");
-
+        try (ObjectInputStream in = new ObjectInputStream(new FileInputStream(SAVE_DIR + "/" + name + ".sav")))
+        {
+            return (GameState) in.readObject();
+        }
+        catch (IOException | ClassNotFoundException e)
+        {
+            System.out.println("Failed Loading " + e.getMessage());
+            return null;
+        }
     }
 }

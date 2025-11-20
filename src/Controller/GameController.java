@@ -46,7 +46,6 @@ public class GameController {
 
     private void roamMonsters()
     {
-        //Iterates over all monsters in the game state.
         for (Monster m : st.getMonsters().values())
         {
             if (m.isStunned())
@@ -61,15 +60,12 @@ public class GameController {
                 continue;
             }
 
-            //Extracts the monster's current floor
             String homeFloor = m.getCurrentRoomID().split("_")[0];
             List<String> exitRoomIDs = new ArrayList<>();
-            //Loops through all the exits from the current room
             for (String roomID : currentRoom.getExits().values())
             {
                 if (roomID.startsWith(homeFloor))
                 {
-                    //Adds only those exits that stay on the same floor. Prevents cross floor roaming.
                     exitRoomIDs.add(roomID);
                 }
             }
@@ -79,18 +75,15 @@ public class GameController {
                 continue;
             }
 
-            //Chooses a random exit
             String nextRoomID = exitRoomIDs.get(new Random().nextInt(exitRoomIDs.size()));
             Room nextRoom = st.getRooms().get(nextRoomID);
             if (nextRoomID.isEmpty())
             {
                 continue;
             }
-            //Removes the monster in the current floor
+
             currentRoom.removeMonster(m);
-            //Adds it to the new room.
             nextRoom.addMonster(m);
-            //updates the monster's room ID.
             m.setCurrentRoomID(nextRoomID);
         }
     }
@@ -160,7 +153,7 @@ public class GameController {
             return;
         }
 
-        if (lowerCase.equalsIgnoreCase("note inventory")) {
+        if (lowerCase.equals("note inventory")) {
             st.getPlayer().viewNoteInventory();
             return;
         }
@@ -435,7 +428,6 @@ public class GameController {
         Player player = st.getPlayer();
         Room current = st.getCurrentRoom();
 
-        //Loops through player's inventory for Artifacts (items)
         for (Artifact item : player.getInventory())
         {
             if (item.getArtifactName().equalsIgnoreCase(itemName))
@@ -463,7 +455,6 @@ public class GameController {
     }
 
     public void handleMovement(String input) {
-        //Retrieves the player's current room
         Room current = st.getCurrentRoom();
         if (current == null)
         {
@@ -484,7 +475,6 @@ public class GameController {
         Room nextRoom = st.getRooms().get(targetRoomID);
         if (nextRoom != null)
         {
-            //Update both the game state and the player's room reference.
             st.setCurrentRoom(nextRoom);
             st.getPlayer().setCurrentRoom(nextRoom);
             vw.println(nextRoom.getRoomName());
@@ -499,11 +489,10 @@ public class GameController {
                 vw.println("Type 'ignore puzzle' to skip.\n");
             }
 
-            //Extracts the floor prefix.
             String playerRoomID = nextRoom.getRoomID();
             String playerFloor = playerRoomID.split("_")[0];
 
-            //reset monster memory if player changed floors
+// Optional: reset monster memory if player changed floors
             String previousFloor = current.getRoomID().split("_")[0];
             if (!previousFloor.equals(playerFloor)) {
                 for (Monster monster : st.getMonsters().values()) {
@@ -511,7 +500,6 @@ public class GameController {
                 }
             }
 
-            //Monster awareness logic
             for (Monster monster : st.getMonsters().values()) {
                 String monsterRoomID = monster.getCurrentRoomID();
                 if (monsterRoomID == null) continue;
@@ -522,9 +510,8 @@ public class GameController {
                 String lastSeenFloor = monster.getLastSeenFloor();
                 boolean seen = lastSeenFloor != null && lastSeenFloor.equals(playerFloor);
 
-                //if the player hasn't seen the monster on this floor yet
                 if (isSameFloor && !seen) {
-                    vw.println(monster.getEnterStatement());
+                    vw.println(monster.getEnterStatement()); // or getExitStatement() if preferred
                     monster.setLastSeenFloor(playerFloor);
                 }
             }
