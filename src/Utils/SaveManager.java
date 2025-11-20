@@ -8,42 +8,30 @@ import java.util.Arrays;
 import java.util.List;
 
 public class SaveManager {
+    private static final String SAVE_DIR = "saves";
 
-    private static final String SAVE_DIR = "saves"; // Folder where all save files will be stored
-
-    // Returns a list of all saved game files (.sav) in the save directory
     public static List<String> listSaves() {
+        //Creates a file object pointing to the directory where the save files are stored.
         File dir = new File(SAVE_DIR);
-        if (!dir.exists()) dir.mkdirs(); // Create directory if it doesn't exist
-        String[] files = dir.list((d, name) -> name.endsWith(".sav")); // Filter only .sav files
-        return files == null ? new ArrayList<>() : Arrays.asList(files); // Return as a List
+        //checks if directory is created, if not it creates it
+        if (!dir.exists()) dir.mkdirs();
+        //Lists all save files that ends with ".sav".
+        String[] files = dir.list((d, name) -> name.endsWith(".sav"));
+        return files == null ? new ArrayList<>() : Arrays.asList(files);
     }
 
-    // Saves the current GameState object to a .sav file with the given name
+    //Saves game.
     public static void saveGame(GameState state, String name)
     {
-        try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(SAVE_DIR + "/" + name + ".sav")))
-        {
-            out.writeObject(state); // Write the GameState object to the save file
-            System.out.println("Game saved as " + name); // Confirm save
-        }
-        catch (IOException e)
-        {
-            System.out.println("Error saving game " + e.getMessage()); // Print error if save fails
-        }
+        //calls gamestate save method
+        state.saveToFile(name + ".sav");
     }
 
-    // Loads a saved GameState object from a .sav file with the given name
+    //Loads game.
     public static GameState loadGame(String name)
     {
-        try (ObjectInputStream in = new ObjectInputStream(new FileInputStream(SAVE_DIR + "/" + name + ".sav")))
-        {
-            return (GameState) in.readObject(); // Read and return the saved GameState
-        }
-        catch (IOException | ClassNotFoundException e)
-        {
-            System.out.println("Failed Loading " + e.getMessage()); // Print error if loading fails
-            return null; // Return null if the load fails
-        }
+        //calls gamestate load method
+        return GameState.loadFromFile(name + ".sav");
+
     }
 }
