@@ -109,6 +109,46 @@ public class GameController {
             return;
         }
 
+        if (lowerCase.equals("attack")) {
+            doAttack();
+            return;
+        }
+
+        // Run away from current monster
+        if (lowerCase.equals("run")) {
+            doRun();
+            return;
+        }
+
+        if (lowerCase.equals("stun")) {
+            Room current = st.getCurrentRoom();
+            if (current == null) {
+                vw.println("You are not in a room.");
+                return;
+            }
+
+            Monster monster = current.getMonster();
+            if (monster == null) {
+                vw.println("There is no monster here to stun.");
+                return;
+            }
+
+            Player player = st.getPlayer();
+            if (player == null) {
+                vw.println("Player not found.");
+                return;
+            }
+
+            Artifact equipped = player.getEquippedArtifact();
+            if (equipped == null || equipped.getStun() <= 0) {
+                vw.println("You don't have a stun artifact equipped.");
+                return;
+            }
+
+            applyStun(monster, equipped);   // <-- uses the applyStun method that is ALREADY in GameController
+            return;
+        }
+
         // Exit list
         if (lowerCase.equals("exits")) {
             displayExits();
